@@ -1,0 +1,33 @@
+@model PFE_Etudiant_Asteelflash.Application.Qrqc.Dtos.QrqcDto
+
+@{
+    ViewData["Title"] = "Supprimer QRQC";
+}
+
+<h2 class="mt-3 text-danger">Confirmer la suppression du QRQC #@Model.Id</h2>
+
+<p>Êtes-vous certain de vouloir supprimer ce QRQC ? Cette action est irréversible.</p>
+
+<table class="table table-bordered">
+    <tbody>
+        <tr>
+            <th>FNC</th>
+            <td>@Model.FNCId</td>
+        </tr>
+        <tr>
+            <th>Client</th>
+            <td>@Model.ClientName</td>
+        </tr>
+        <tr>
+            <th>Nature du défaut</th>
+            <td>@Model.NatureDefaut</td>
+        </tr>
+    </tbody>
+</table>
+
+<form asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Supprimer</button>
+    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary ms-2">Annuler</a>
+</form>

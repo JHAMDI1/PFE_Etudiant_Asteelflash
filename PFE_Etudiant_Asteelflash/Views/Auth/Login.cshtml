@@ -1,0 +1,65 @@
+@* ------------------------------------------------------------
+   Vue Login.cshtml
+   Formulaire de connexion : POST vers AuthController.Login.
+   Affiche les erreurs via ViewBag.ErrorMessage.
+   ------------------------------------------------------------ *@
+@model LoginRequestDto
+@{
+    ViewData["Title"] = "Connexion";
+    Layout = "~/Views/Shared/_LayoutAuth.cshtml";
+}
+<h4 class="text-center mb-4">Bienvenue !</h4>
+<p class="text-center mb-4">Connectez-vous pour continuer</p>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+<form asp-action="Login" method="post" class="pt-3">
+    <div class="form-group">
+        <label asp-for="Matricule">Matricule</label>
+        <div class="input-group">
+            <div class="input-group-prepend bg-transparent">
+                <span class="input-group-text bg-transparent border-right-0">
+                    <i class="mdi mdi-account-outline text-primary"></i>
+                </span>
+            </div>
+            <input asp-for="Matricule" class="form-control form-control-lg border-left-0" placeholder="Matricule">
+        </div>
+        <span asp-validation-for="Matricule" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password">Mot de passe</label>
+        <div class="input-group">
+            <div class="input-group-prepend bg-transparent">
+                <span class="input-group-text bg-transparent border-right-0">
+                    <i class="mdi mdi-lock-outline text-primary"></i>
+                </span>
+            </div>
+            <input asp-for="Password" type="password" class="form-control form-control-lg border-left-0" placeholder="Mot de passe">
+        </div>
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="my-2 d-flex justify-content-between align-items-center">
+        <div class="form-check">
+            <label class="form-check-label text-muted">
+                <input type="checkbox" name="RememberMe" class="form-check-input">
+                Se souvenir de moi
+            </label>
+        </div>
+        <a class="auth-link text-black" asp-controller="Auth" asp-action="ForgotPassword">Mot de passe oublié?</a>
+    </div>
+    <div class="mt-4 text-center">
+        <button type="submit" class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn">CONNEXION</button>
+    </div>
+    <div class="text-center mt-4 font-weight-light">
+        Pas encore de compte? <a asp-action="Register" class="text-primary">Créer un compte</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,39 @@
+/* Style CSS pour PurpleAdmin */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f7ff;
+}
+
+.auth {
+  min-height: 100vh;
+}
+
+.auth-bg-1 {
+  background-image: url('../images/auth-bg.jpg');
+  background-size: cover;
+}
+
+.auto-form-wrapper {
+  background: white;
+  padding: 40px;
+  border-radius: 4px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.btn-primary {
+  background-color: #7a00ff;
+  border-color: #7a00ff;
+}
+
+.btn-primary:hover {
+  background-color: #6200cc;
+  border-color: #6200cc;
+}
+
+.text-danger {
+  color: #ff0000;
+}

@@ -1,0 +1,131 @@
+@using PFE_Etudiant_Asteelflash.Application.PlanAction.Dtos
+@model PlanActionFncQrqcDto
+@{
+    ViewData["Title"] = "Nouveau plan d'action";
+}
+<h1>Nouveau plan d'action</h1>
+<style>
+    /* largeur minimale des champs texte dans les lignes du plan */
+    .plan-table th, .plan-table td {
+        min-width: 200px; /* ≈ 20+ caractères */
+        white-space: pre-wrap;
+    }
+    .plan-table td input[type="text"],
+    .plan-table td input[type="number"],
+    .plan-table td input[type="date"],
+    .plan-table td textarea {
+        min-width: 200px;
+    }
+</style>
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+    <partial name="_Form" />
+
+    <h4 class="mt-4">Lignes du plan d'action</h4>
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm plan-table">
+            <thead class="text-nowrap">
+                <tr>
+                    <th>N°</th>
+                    <th>Date création</th>
+                    <th>Origine</th>
+                    <th>Sujet</th>
+                    <th>Processus</th>
+                    <th>Desc. problème</th>
+                    <th>Cause racine</th>
+                    <th>Q/D</th>
+                    <th>NC</th>
+                    <th>Action</th>
+                    <th>Responsable</th>
+                    <th>Date prévue</th>
+                    <th>Date réalisé</th>
+                    <th>Date mesure eff.</th>
+                    <th>Resp. mesure eff.</th>
+                    <th>Efficace ?</th>
+                    <th>Avancement</th>
+                    <th>Retard (j)</th>
+                    <th>Commentaire</th>
+                    <th>Point critique</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="lignes-body">
+                <tr>
+                    <td><input name="Lignes[0].Numero" type="number" min="1" class="form-control" value="1" /></td>
+                    <td><input name="Lignes[0].DateCreation" type="date" class="form-control" /></td>
+                    <td><input name="Lignes[0].Origine" class="form-control" /></td>
+                    <td><input name="Lignes[0].Sujet" class="form-control" /></td>
+                    <td><input name="Lignes[0].Processus" class="form-control" /></td>
+                    <td><input name="Lignes[0].DescriptionProbleme" class="form-control" /></td>
+                    <td><input name="Lignes[0].CauseRacine" class="form-control" /></td>
+                    <td><input name="Lignes[0].TypeAction" class="form-control" placeholder="Q / D" /></td>
+                    <td class="text-center"><input name="Lignes[0].NC" type="checkbox" class="form-check-input" value="true" /></td>
+                    <td><input name="Lignes[0].Action" class="form-control" /></td>
+                    <td><input name="Lignes[0].Responsable" class="form-control" /></td>
+                    <td><input name="Lignes[0].DatePrevue" type="date" class="form-control" /></td>
+                    <td><input name="Lignes[0].DateRealise" type="date" class="form-control" /></td>
+                    <td><input name="Lignes[0].DateMesureEfficacite" type="date" class="form-control" /></td>
+                    <td><input name="Lignes[0].RespMesureEfficacite" class="form-control" /></td>
+                    <td class="text-center"><input name="Lignes[0].EfficaciteOK" type="checkbox" class="form-check-input" value="true" /></td>
+                    <td><input name="Lignes[0].Avancement" class="form-control" /></td>
+                    <td><input name="Lignes[0].Retard" type="number" class="form-control" /></td>
+                    <td><input name="Lignes[0].Commentaire" class="form-control" /></td>
+                    <td><input name="Lignes[0].PointCritique" class="form-control" /></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <button type="button" id="add-ligne" class="btn btn-sm btn-primary mb-3">+ Ajouter une ligne</button>
+
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+
+    @section Scripts {
+        <script type="text/template" id="ligne-template">
+            <tr>
+                <td><input name="Lignes[__index__].Numero" type="number" min="1" class="form-control" value="__display__" /></td>
+                <td><input name="Lignes[__index__].DateCreation" type="date" class="form-control" /></td>
+                <td><input name="Lignes[__index__].Origine" class="form-control" /></td>
+                <td><input name="Lignes[__index__].Sujet" class="form-control" /></td>
+                <td><input name="Lignes[__index__].Processus" class="form-control" /></td>
+                <td><input name="Lignes[__index__].DescriptionProbleme" class="form-control" /></td>
+                <td><input name="Lignes[__index__].CauseRacine" class="form-control" /></td>
+                <td><input name="Lignes[__index__].TypeAction" class="form-control" placeholder="Q / D" /></td>
+                <td class="text-center"><input name="Lignes[__index__].NC" type="checkbox" class="form-check-input" value="true" /></td>
+                <td><input name="Lignes[__index__].Action" class="form-control" /></td>
+                <td><input name="Lignes[__index__].Responsable" class="form-control" /></td>
+                <td><input name="Lignes[__index__].DatePrevue" type="date" class="form-control" /></td>
+                <td><input name="Lignes[__index__].DateRealise" type="date" class="form-control" /></td>
+                <td><input name="Lignes[__index__].DateMesureEfficacite" type="date" class="form-control" /></td>
+                <td><input name="Lignes[__index__].RespMesureEfficacite" class="form-control" /></td>
+                <td class="text-center"><input name="Lignes[__index__].EfficaciteOK" type="checkbox" class="form-check-input" value="true" /></td>
+                <td><input name="Lignes[__index__].Avancement" class="form-control" /></td>
+                <td><input name="Lignes[__index__].Retard" type="number" class="form-control" /></td>
+                <td><input name="Lignes[__index__].Commentaire" class="form-control" /></td>
+                <td><input name="Lignes[__index__].PointCritique" class="form-control" /></td>
+                <td><button type="button" class="btn btn-danger remove-ligne">Supprimer</button></td>
+            </tr>
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                let indexLigne = 1;
+                const tbody = document.getElementById('lignes-body');
+                document.getElementById('add-ligne').addEventListener('click', e => {
+                    e.preventDefault();
+                    const tpl = document.getElementById('ligne-template').innerHTML;
+                    const displayNum = indexLigne + 1;
+                    const rowHtml = tpl.replace(/__index__/g, indexLigne).replace(/__display__/g, displayNum);
+                    tbody.insertAdjacentHTML('beforeend', rowHtml);
+                    indexLigne++;
+                });
+                document.addEventListener('click', e => {
+                    if (e.target && e.target.classList.contains('remove-ligne')) {
+                        e.preventDefault();
+                        e.target.closest('tr').remove();
+                    }
+                });
+            });
+        </script>
+    }
+</form>

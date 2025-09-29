@@ -1,0 +1,141 @@
+@* ------------------------------------------------------------
+   Vue Delete.cshtml
+   Page de confirmation de suppression d'une FNC.
+   Affiche un avertissement puis POST vers FncController.DeleteConfirmed.
+   ------------------------------------------------------------ *@
+@model PFE_Etudiant_Asteelflash.Application.Fnc.Dtos.FncDto
+
+@{
+    ViewData["Title"] = "Supprimer la FNC";
+}
+
+<div class="container">
+    <h1 class="text-danger">@ViewData["Title"]</h1>
+    
+    <div class="alert alert-warning">
+        <h4><i class="fas fa-exclamation-triangle"></i> Êtes-vous sûr de vouloir supprimer cette FNC ?</h4>
+        <p>Cette action est irréversible et supprimera définitivement cette fiche de non-conformité.</p>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-clipboard-list text-primary mr-2"></i>
+                FNC #@Model.Ref
+            </h5>
+            <span class="badge @GetStatusBadgeClass(Model.Status) p-2">@Model.Status</span>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label font-weight-bold">Référence:</label>
+                        <div class="col-sm-8">
+                            <p class="form-control-plaintext">@Model.Ref</p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label font-weight-bold">Date:</label>
+                        <div class="col-sm-8">
+                            <p class="form-control-plaintext">@Model.Date.ToString("dd/MM/yyyy") @Model.Hour.ToString(@"hh\:mm")</p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label font-weight-bold">Client:</label>
+                        <div class="col-sm-8">
+                            <p class="form-control-plaintext">@Model.Client_name</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label font-weight-bold">Zone de production:</label>
+                        <div class="col-sm-8">
+                            <p class="form-control-plaintext">@Model.ZapName</p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label font-weight-bold">Transmis par:</label>
+                        <div class="col-sm-8">
+                            <p class="form-control-plaintext">@Model.TransmitterName</p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label font-weight-bold">Traité par:</label>
+                        <div class="col-sm-8">
+                            <p class="form-control-plaintext">@Model.ProcessorName</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form id="deleteFncForm">
+        <input type="hidden" id="fncId" value="@Model.Id" />
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left mr-1"></i> Retour aux détails
+                    </a>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash mr-1"></i> Confirmer la suppression
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Gérer la soumission du formulaire de suppression
+            $('#deleteFncForm').submit(function(e) {
+                e.preventDefault();
+                
+                var fncId = $('#fncId').val();
+                
+                // Demander confirmation
+                if (!confirm('Êtes-vous vraiment sûr de vouloir supprimer définitivement cette FNC ?')) {
+                    return;
+                }
+                
+                // Envoyer la demande de suppression à l'API
+                $.ajax({
+                    url: '/api/Fnc/' + fncId,
+                    type: 'DELETE',
+                    success: function() {
+                        // Rediriger vers la liste des FNCs après suppression réussie
+                        window.location.href = '/Fnc/Index';
+                    },
+                    error: function(error) {
+                        console.error('Erreur lors de la suppression de la FNC:', error);
+                        var errorMessage = 'Une erreur est survenue lors de la suppression de la FNC.';
+                        
+                        if (error.responseJSON && error.responseJSON.message) {
+                            errorMessage = error.responseJSON.message;
+                        }
+                        
+                        alert(errorMessage);
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+@functions {
+    string GetStatusBadgeClass(string status)
+    {
+        switch (status)
+        {
+            case "Ouverte": return "badge-primary";
+            case "En_cours": return "badge-warning";
+            case "Clôturée": return "badge-success";
+            case "En_attente": return "badge-info";
+            default: return "badge-secondary";
+        }
+    }
+}

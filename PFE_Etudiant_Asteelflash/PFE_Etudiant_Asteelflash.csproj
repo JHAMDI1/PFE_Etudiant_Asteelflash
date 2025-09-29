@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Views\Day2\**" />
+    <Content Remove="Views\Day2\**" />
+    <EmbeddedResource Remove="Views\Day2\**" />
+    <None Remove="Views\Day2\**" />
+  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.14" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.14">
+		</PackageReference>
+	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PFE_Etudiant_Asteelflash.Application\PFE_Etudiant_Asteelflash.Application.csproj" />
+    <ProjectReference Include="..\PFE_Etudiant_Asteelflash.Domain\PFE_Etudiant_Asteelflash.Domain.csproj" />
+    <ProjectReference Include="..\PFE_Etudiant_Asteelflash.Infrastucture\PFE_Etudiant_Asteelflash.Infrastucture.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Mapping\Qrqc\" />
+    <Folder Include="Models\Qrqc\" />
+    <Folder Include="Views\Qrqc\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+  <!-- Background shadow -->
+  <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="0.8" />
+    <feOffset dx="0.5" dy="0.5" result="offsetblur" />
+    <feComponentTransfer>
+      <feFuncA type="linear" slope="0.4" />
+    </feComponentTransfer>
+    <feMerge>
+      <feMergeNode />
+      <feMergeNode in="SourceGraphic" />
+    </feMerge>
+  </filter>
+  
+  <!-- AsteelFlash A-shape logo with exact triangles -->
+  <g filter="url(#shadow)" transform="translate(5, 5) scale(0.8)">
+    <!-- Top-left red triangle -->
+    <polygon points="17,7 5,25 30,25" fill="#c02126" stroke="#ffffff" stroke-width="0.3" />
+    
+    <!-- Bottom red triangle -->
+    <polygon points="30,25 17,42 42,42" fill="#c02126" stroke="#ffffff" stroke-width="0.3" />
+    
+    <!-- Top-right blue triangle -->
+    <polygon points="42,7 30,25 55,25" fill="#2058a5" stroke="#ffffff" stroke-width="0.3" />
+    
+    <!-- Small blue triangle (top) -->
+    <polygon points="42,7 55,7 48,18" fill="#2058a5" stroke="#ffffff" stroke-width="0.3" />
+  </g>
+</svg>

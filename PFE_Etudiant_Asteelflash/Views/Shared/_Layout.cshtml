@@ -1,0 +1,68 @@
+@* ------------------------------------------------------------
+   Vue partielle _Layout.cshtml
+   Layout principal de l'application (zone admin). Inclut navbar,
+   sidebar, footer et injection du rendu @RenderBody().
+   Configure aussi les ressources CSS/JS et partial _Notification.
+   ------------------------------------------------------------ *@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <title>@ViewData["Title"] - Deep Think</title>
+
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="~/admin/vendors/mdi/css/materialdesignicons.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/admin/vendors/css/vendor.bundle.base.css" asp-append-version="true" />
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css" />
+
+
+    <!-- Layout et styles PurpleAdmin -->
+    <link rel="stylesheet" href="~/admin/css/style.css" asp-append-version="true" />
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="~/admin/images/Asteelflashv2.jpg" asp-append-version="true" />
+    <link rel="icon" type="image/jpeg" href="~/admin/images/Asteelflashv2.jpg" asp-append-version="true" />
+</head>
+<body>
+    <div class="container-scroller">
+        <!-- Navbar -->
+        @await Html.PartialAsync("_AdminNavbar")
+
+        <div class="container-fluid page-body-wrapper">
+            <!-- Sidebar -->
+            @await Html.PartialAsync("_AdminSidebar")
+
+            <!-- Contenu principal -->
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    @RenderBody()
+                    <partial name="_Notification" />
+                </div>
+
+                <!-- Footer -->
+                @await Html.PartialAsync("_AdminFooter")
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts essentiels -->
+    <script src="~/admin/vendors/js/vendor.bundle.base.js" asp-append-version="true"></script>
+
+    <!-- Plugin JS -->
+    <script src="~/admin/js/off-canvas.js" asp-append-version="true"></script>
+    <script src="~/admin/js/hoverable-collapse.js" asp-append-version="true"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.js"></script>
+    <script src="~/admin/js/misc.js" asp-append-version="true"></script>
+    
+    <!-- SignalR -->
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+    
+    <!-- Notification handler -->
+    <script src="~/js/notif.js"></script>
+
+    <!-- Inclure les scripts personnalisés -->
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

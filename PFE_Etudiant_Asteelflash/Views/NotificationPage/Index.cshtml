@@ -1,0 +1,61 @@
+@* ------------------------------------------------------------
+   Vue NotificationPage/Index.cshtml
+   Affiche la liste des notifications utilisateur (injectées par
+   NotificationsController.Index). Permet de marquer une notification
+   comme lue via un POST vers NotificationsController.MarkAsRead.
+   Les lignes non lues sont surlignées en jaune.
+   ------------------------------------------------------------ *@
+@model IEnumerable<PFE_Etudiant_Asteelflash.Domain.Entities.Notification>
+@{
+    ViewData["Title"] = "Mes notifications";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+    <hr />
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">Aucune notification.</div>
+    }
+    else
+    {
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Date</th>
+                    <th>Message</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var notif in Model)
+            {
+                var rowClass = notif.IsRead ? "" : "table-warning";
+                <tr class="@rowClass">
+                    <td>@notif.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(notif.Link))
+                        {
+                            <a href="@notif.Link">@notif.Message</a>
+                        }
+                        else
+                        {
+                            @notif.Message
+                        }
+                    </td>
+                    <td class="text-end">
+                        @if (!notif.IsRead)
+                        {
+                            <form asp-action="MarkAsRead" asp-controller="Notifications" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@notif.Id" />
+                                <button type="submit" class="btn btn-sm btn-outline-primary">Marquer comme lue</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+</div>

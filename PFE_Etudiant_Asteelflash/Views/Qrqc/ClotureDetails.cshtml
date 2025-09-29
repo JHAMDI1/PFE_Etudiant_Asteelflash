@@ -1,0 +1,98 @@
+@model PFE_Etudiant_Asteelflash.Domain.Entities.Qrqc
+
+@{
+    ViewData["Title"] = "Validation clôture QRQC";
+}
+
+<div class="container mt-4">
+    <h2>Validation clôture QRQC n°@Model.Id</h2>
+
+    <div class="alert alert-info">Statut actuel : <strong>@Model.Status</strong></div>
+
+    <div class="card mb-4">
+        <div class="card-header">Informations QRQC</div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID FNC</dt>
+                <dd class="col-sm-9">@Model.FNCId</dd>
+
+                <dt class="col-sm-3">Date ouverture</dt>
+                <dd class="col-sm-9">@Model.DateOuverture.ToString("dd/MM/yyyy")</dd>
+
+                <dt class="col-sm-3">Responsable traitement</dt>
+                <dd class="col-sm-9">@Model.Processor?.FirstName @Model.Processor?.LastName</dd>
+            </dl>
+        </div>
+    </div>
+
+    <!-- Boutons décision -->
+    <!-- Boutons d'action (compatibles Bootstrap 4 & 5) -->
+    <div class="d-flex gap-3">
+        <!-- Approuver -->
+        <button class="btn btn-success" data-toggle="modal" data-bs-toggle="modal" data-target="#approveModal" data-bs-target="#approveModal">Approuver</button>
+        <!-- Rejeter -->
+        <button class="btn btn-danger" data-toggle="modal" data-bs-toggle="modal" data-target="#rejectModal" data-bs-target="#rejectModal">Rejeter</button>
+    </div>
+
+    <!-- Modal approbation -->
+    <div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="approveModalLabel">Confirmer l'approbation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous certain de vouloir clôturer ce QRQC ? Cette action est irréversible.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <form asp-action="ApproveCloture" method="post" class="d-inline">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <input type="hidden" name="token" value="@Model.ClotureToken" />
+                        <button type="submit" class="btn btn-success">Confirmer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal rejet -->
+    <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rejectModalLabel">Rejeter la clôture</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form asp-action="RejectCloture" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <input type="hidden" name="token" value="@Model.ClotureToken" />
+                        <div class="form-group">
+                            <label for="rejectReason">Motif du rejet <span class="text-danger">*</span></label>
+                            <textarea id="rejectReason" name="reason" class="form-control" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-danger">Rejeter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script>
+            // Focus textarea when modal shown
+            $('#rejectModal').on('shown.bs.modal', function () {
+                $('#rejectReason').trigger('focus');
+            });
+        </script>
+    }
+</div>

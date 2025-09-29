@@ -1,0 +1,377 @@
+@* ------------------------------------------------------------
+   Vue Edit.cshtml
+   Formulaire de modification d'une FNC existante. Utilise
+   FncEditViewModel et POST vers FncController.Edit (Update).
+   ------------------------------------------------------------ *@
+@model PFE_Etudiant_Asteelflash.Models.Fnc.FncEditViewModel
+
+@{
+    ViewData["Title"] = "Modifier une FNC";
+}
+
+<div class="container">
+    <h1>@ViewData["Title"]</h1>
+    
+    <form id="updateFncForm" method="post">
+        <input type="hidden" asp-for="Id" />
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-file-alt text-primary mr-2"></i>
+                    Informations générales
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Ref" class="control-label">Référence</label>
+                            <input asp-for="Ref" class="form-control" />
+                            <span asp-validation-for="Ref" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Num" class="control-label">Numéro</label>
+                            <input asp-for="Num" class="form-control" />
+                            <span asp-validation-for="Num" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ZapEmettriceId" class="control-label">ZAP émettrice</label>
+                            <select asp-for="ZapEmettriceId" class="form-control" id="zapEmettriceSelect">
+                                @foreach (var item in Model.ZapOptions)
+                                {
+                                    if (int.TryParse(item.Value, out int zapVal) && zapVal == Model.ZapEmettriceId)
+                                    {
+                                        <option selected value="@item.Value">@item.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="ZapEmettriceId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ZapReceptriceId" class="control-label">ZAP réceptrice</label>
+                            <select asp-for="ZapReceptriceId" class="form-control" id="zapReceptriceSelect">
+                                @foreach (var item in Model.ZapOptions)
+                                {
+                                    if (int.TryParse(item.Value, out int zapVal) && zapVal == Model.ZapReceptriceId)
+                                    {
+                                        <option selected value="@item.Value">@item.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="ZapReceptriceId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Date" class="control-label">Date</label>
+                            <input asp-for="Date" class="form-control" type="date" />
+                            <span asp-validation-for="Date" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Hour" class="control-label">Heure</label>
+                            <input asp-for="Hour" class="form-control" type="time" />
+                            <span asp-validation-for="Hour" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Client_name" class="control-label">Client</label>
+                            <input asp-for="Client_name" class="form-control" />
+                            <span asp-validation-for="Client_name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TransmitterId" class="control-label">Transmetteur</label>
+                            <select asp-for="TransmitterId" class="form-control" id="transmitterSelect">
+                                @foreach (var option in Model.UserOptions)
+                                {
+                                    if (option.Value == Model.TransmitterId)
+                                    {
+                                        <option value="@option.Value" selected>@option.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@option.Value">@option.Text</option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="TransmitterId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ProcessorId" class="control-label">Processeur</label>
+                            <select asp-for="ProcessorId" class="form-control" id="processorSelect">
+                                @foreach (var option in Model.UserOptions)
+                                {
+                                    if (option.Value == Model.ProcessorId)
+                                    {
+                                        <option value="@option.Value" selected>@option.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@option.Value">@option.Text</option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="ProcessorId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Status" class="control-label">Statut</label>
+                            <select asp-for="Status" class="form-control">
+                                <option value="Ouverte">Ouverte</option>
+                                <option value="En_cours">En cours</option>
+                                <option value="Clôturée">Clôturée</option>
+                                <option value="En_attente">En attente</option>
+                            </select>
+                            <span asp-validation-for="Status" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Detection_loc" class="control-label">Lieu de détection</label>
+                            <input asp-for="Detection_loc" class="form-control" />
+                            <span asp-validation-for="Detection_loc" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-exclamation-triangle text-warning mr-2"></i>
+                    Détails de la non-conformité
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Description" class="control-label">Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Quantity_NOK" class="control-label">Quantité non conforme</label>
+                            <input asp-for="Quantity_NOK" class="form-control" type="number" min="0" />
+                            <span asp-validation-for="Quantity_NOK" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Bilan_de_tri" class="control-label">Bilan de tri</label>
+                            <div class="form-check">
+                                <input asp-for="Bilan_de_tri" class="form-check-input" type="checkbox" />
+                                <label class="form-check-label" for="Bilan_de_tri">Effectué</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="TypeDefaut" class="control-label">Type de défaut</label>
+                            <select asp-for="TypeDefaut" class="form-control" asp-items="Html.GetEnumSelectList<PFE_Etudiant_Asteelflash.Domain.Enums.TypeDefaut>()"></select>
+                            <span asp-validation-for="TypeDefaut" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TypeFnc" class="control-label">Type de FNC</label>
+                            <select asp-for="TypeFnc" class="form-control" asp-items="Html.GetEnumSelectList<PFE_Etudiant_Asteelflash.Domain.Enums.TypeFnc>()"></select>
+                            <span asp-validation-for="TypeFnc" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="NcImpact" class="control-label">Impact NC</label>
+                            <select asp-for="NcImpact" class="form-control" asp-items="Html.GetEnumSelectList<PFE_Etudiant_Asteelflash.Domain.Enums.NcImpact>()"></select>
+                            <span asp-validation-for="NcImpact" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="ActionImmediate" class="control-label">Action immédiate</label>
+                            <select asp-for="ActionImmediate" class="form-control" asp-items="Html.GetEnumSelectList<PFE_Etudiant_Asteelflash.Domain.Enums.ActionImm>()"></select>
+                            <span asp-validation-for="ActionImmediate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="CurrentImageUrl" class="control-label">Image actuelle</label>
+                            @if (!string.IsNullOrEmpty(Model.CurrentImageUrl))
+                            {
+                                <div class="mb-2">
+                                    <img src="@Model.CurrentImageUrl" alt="Image actuelle" class="img-thumbnail" style="max-height: 150px;" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left mr-1"></i> Retour à la liste
+                    </a>
+                    <div>
+                        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-info mr-2">
+                            <i class="fas fa-eye mr-1"></i> Détails
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save mr-1"></i> Enregistrer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function () {
+            // Charger les détails de la FNC existante
+            var fncId = @Model.Id;
+            
+            // Charger les ZAPs
+            $.ajax({
+                url: '/api/Zap',
+                type: 'GET',
+                contentType: 'application/json',
+                success: function(data) {
+                    var zapEmettriceSelect = $('#zapEmettriceSelect');
+                    var zapReceptriceSelect = $('#zapReceptriceSelect');
+                    
+                    zapEmettriceSelect.empty();
+                    zapReceptriceSelect.empty();
+                    
+                    $.each(data, function(index, zap) {
+                        var option = $('<option>', {
+                            value: zap.id,
+                            text: zap.name
+                        });
+                        
+                        if (zap.id === @Model.ZapEmettriceId) {
+                            option.attr('selected', 'selected');
+                            zapEmettriceSelect.append(option);
+                        }
+                        if (zap.id === @Model.ZapReceptriceId) {
+                            option.attr('selected', 'selected');
+                            zapReceptriceSelect.append(option);
+                        }
+                        else {
+                            zapEmettriceSelect.append(option);
+                            zapReceptriceSelect.append(option);
+                        }
+                    });
+                },
+                error: function(error) {
+                    console.error('Erreur lors de la récupération des ZAPs:', error);
+                }
+            });
+
+            // Charger les utilisateurs pour les sélecteurs de transmetteur et processeur
+            $.ajax({
+                url: '/api/User',
+                type: 'GET',
+                contentType: 'application/json',
+                success: function(data) {
+                    var transmitterSelect = $('#transmitterSelect');
+                    var processorSelect = $('#processorSelect');
+                    
+                    transmitterSelect.empty();
+                    processorSelect.empty();
+                    
+                    $.each(data, function(index, user) {
+                        var fullName = user.firstName + ' ' + user.lastName;
+                        
+                        var transmitterOption = $('<option>', {
+                            value: user.id,
+                            text: fullName
+                        });
+                        
+                        var processorOption = $('<option>', {
+                            value: user.id,
+                            text: fullName
+                        });
+                        
+                        if (user.id === '@Model.TransmitterId') {
+                            transmitterOption.attr('selected', 'selected');
+                        }
+                        
+                        if (user.id === '@Model.ProcessorId') {
+                            processorOption.attr('selected', 'selected');
+                        }
+                        
+                        transmitterSelect.append(transmitterOption);
+                        processorSelect.append(processorOption);
+                    });
+                },
+                error: function(error) {
+                    console.error('Erreur lors de la récupération des utilisateurs:', error);
+                }
+            });
+
+            // Gérer la soumission du formulaire
+            $('#updateFncForm').submit(function(e) {
+                e.preventDefault();
+                
+                var formData = $(this).serializeArray();
+                var jsonData = {};
+                
+                // Convertir les données du formulaire en objet JSON
+                $(formData).each(function(index, field) {
+                    if (field.name.indexOf(".") > -1) {
+                        var parts = field.name.split(".");
+                        if (!jsonData[parts[0]]) jsonData[parts[0]] = {};
+                        jsonData[parts[0]][parts[1]] = field.value;
+                    } else {
+                        jsonData[field.name] = field.value;
+                    }
+                });
+                
+                // Convertir les types de données appropriés
+                jsonData.Id = parseInt(jsonData.Id);
+                jsonData.ZapEmettriceId = parseInt(jsonData.ZapEmettriceId);
+                jsonData.ZapReceptriceId = parseInt(jsonData.ZapReceptriceId);
+                jsonData.Quantity_NOK = parseInt(jsonData.Quantity_NOK);
+                jsonData.Bilan_de_tri = $('#Bilan_de_tri').prop('checked');
+                jsonData.TypeDefaut = parseInt(jsonData.TypeDefaut);
+                jsonData.TypeFnc = parseInt(jsonData.TypeFnc);
+                jsonData.NcImpact = parseInt(jsonData.NcImpact);
+                jsonData.ActionImmediate = parseInt(jsonData.ActionImmediate);
+                
+                // Envoyer les données à l'API
+                $.ajax({
+                    url: '/api/Fnc',
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(jsonData),
+                    success: function(data) {
+                        window.location.href = '/Fnc/Details/' + jsonData.Id;
+                    },
+                    error: function(error) {
+                        console.error('Erreur lors de la mise à jour de la FNC:', error);
+                        var errorMessage = 'Une erreur est survenue lors de la mise à jour de la FNC.';
+                        
+                        if (error.responseJSON && error.responseJSON.message) {
+                            errorMessage = error.responseJSON.message;
+                        }
+                        
+                        alert(errorMessage);
+                    }
+                });
+            });
+        });
+    </script>
+}

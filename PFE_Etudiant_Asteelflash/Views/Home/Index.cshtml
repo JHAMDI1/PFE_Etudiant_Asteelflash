@@ -1,0 +1,212 @@
+@* ------------------------------------------------------------
+   Vue Home/Index.cshtml
+   Tableau de bord principal affichant des KPI génériques.
+   Les valeurs sont pour le moment statiques mais peuvent être
+   remplacées par des données dynamiques via HomeController.Index.
+   ------------------------------------------------------------ *@
+@{
+    ViewData["Title"] = "Tableau de bord";
+}
+
+<div class="page-header">
+    <h3 class="page-title">
+        <span class="page-title-icon bg-gradient-primary text-white me-2">
+            <i class="mdi mdi-home"></i>
+        </span> Tableau de bord
+    </h3>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">
+                <span></span>Vue générale <i class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div class="row">
+    <div class="col-md-4 stretch-card grid-margin">
+        <div class="card bg-gradient-danger card-img-holder text-white">
+            <div class="card-body">
+                <img src="~/admin/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                <h4 class="font-weight-normal mb-3">
+                    Tickets en cours <i class="mdi mdi-chart-line mdi-24px float-right"></i>
+                </h4>
+                <h2 class="mb-5">15</h2>
+                <h6 class="card-text">Augmentation de 60%</h6>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 stretch-card grid-margin">
+        <div class="card bg-gradient-info card-img-holder text-white">
+            <div class="card-body">
+                <img src="~/admin/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                <h4 class="font-weight-normal mb-3">
+                    Tickets résolus <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
+                </h4>
+                <h2 class="mb-5">45</h2>
+                <h6 class="card-text">Diminution de 10%</h6>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 stretch-card grid-margin">
+        <div class="card bg-gradient-success card-img-holder text-white">
+            <div class="card-body">
+                <img src="~/admin/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                <h4 class="font-weight-normal mb-3">
+                    Utilisateurs actifs <i class="mdi mdi-diamond mdi-24px float-right"></i>
+                </h4>
+                <h2 class="mb-5">12</h2>
+                <h6 class="card-text">Augmentation de 5%</h6>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-7 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="clearfix">
+                    <h4 class="card-title float-left">Statistiques des tickets</h4>
+                    <div id="visit-sale-chart-legend" class="rounded-legend legend-horizontal legend-top-right float-right"></div>
+                </div>
+                <canvas id="visit-sale-chart" class="mt-4"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Répartition des types</h4>
+                <canvas id="traffic-chart"></canvas>
+                <div id="traffic-chart-legend" class="rounded-legend legend-vertical legend-bottom-left pt-4"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Tickets récents</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th> # </th>
+                                <th> Titre </th>
+                                <th> Statut </th>
+                                <th> Assigné à </th>
+                                <th> Date </th>
+                                <th> Actions </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td> 1 </td>
+                                <td> Problème de connexion </td>
+                                <td>
+                                    <label class="badge badge-gradient-success">Résolu</label>
+                                </td>
+                                <td> Omar Yassine </td>
+                                <td> 25 avril 2025 </td>
+                                <td> <button class="btn btn-gradient-primary btn-sm">Détails</button> </td>
+                            </tr>
+                            <tr>
+                                <td> 2 </td>
+                                <td> Erreur d'authentification </td>
+                                <td>
+                                    <label class="badge badge-gradient-warning">En cours</label>
+                                </td>
+                                <td> Emna Ben Romdhane </td>
+                                <td> 26 avril 2025 </td>
+                                <td> <button class="btn btn-gradient-primary btn-sm">Détails</button> </td>
+                            </tr>
+                            <tr>
+                                <td> 3 </td>
+                                <td> Affichage incorrect </td>
+                                <td>
+                                    <label class="badge badge-gradient-info">En revue</label>
+                                </td>
+                                <td> Oussama Souissi </td>
+                                <td> 27 avril 2025 </td>
+                                <td> <button class="btn btn-gradient-primary btn-sm">Détails</button> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Optionnel: Ajouter Chart.js pour les graphiques du dashboard -->
+    <script src="~/admin/vendors/chart.js/Chart.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialisation des graphiques
+            if ($("#visit-sale-chart").length) {
+                var ctx = document.getElementById('visit-sale-chart').getContext("2d");
+                var gradientStrokeBlue = ctx.createLinearGradient(0, 0, 0, 181);
+                gradientStrokeBlue.addColorStop(0, 'rgba(54, 215, 232, 1)');
+                gradientStrokeBlue.addColorStop(1, 'rgba(177, 148, 250, 1)');
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ["JAN", "FEV", "MAR", "AVR", "MAI", "JUN", "JUL", "AOU"],
+                        datasets: [{
+                            label: "Tickets créés",
+                            borderColor: gradientStrokeBlue,
+                            backgroundColor: gradientStrokeBlue,
+                            pointBackgroundColor: gradientStrokeBlue,
+                            pointBorderColor: "#fff",
+                            pointHoverBackgroundColor: "#fff",
+                            pointHoverBorderColor: gradientStrokeBlue,
+                            data: [20, 25, 32, 18, 27, 22, 28, 20],
+                            borderWidth: 3,
+                            fill: 'origin'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true
+                    }
+                });
+            }
+
+            if ($("#traffic-chart").length) {
+                var ctx = document.getElementById('traffic-chart').getContext("2d");
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        datasets: [{
+                            data: [25, 40, 35],
+                            backgroundColor: [
+                                '#FF5A5A',
+                                '#7978E9',
+                                '#4ECDC4'
+                            ],
+                            borderColor: [
+                                '#FF5A5A',
+                                '#7978E9',
+                                '#4ECDC4'
+                            ],
+                        }],
+                        labels: [
+                            'Bugs',
+                            'Améliorations',
+                            'Support'
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true
+                    }
+                });
+            }
+        });
+    </script>
+}

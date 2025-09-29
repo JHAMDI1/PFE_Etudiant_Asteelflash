@@ -1,0 +1,25 @@
+@model PFE_Etudiant_Asteelflash.Application.Réclamation.Dtos.ReclamationDto
+@{
+    ViewData["Title"] = "Détails de la réclamation";
+}
+
+<h2 class="mb-4"><i class="fas fa-eye text-primary"></i> @ViewData["Title"]</h2>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">ID</dt>
+            <dd class="col-sm-9">@Model.Id</dd>
+
+            <dt class="col-sm-3">Description</dt>
+            <dd class="col-sm-9">@Model.Description</dd>
+
+            <dt class="col-sm-3">Date création</dt>
+            <dd class="col-sm-9">@Model.DateCreation.ToString("dd/MM/yyyy HH:mm")</dd>
+
+            <dt class="col-sm-3">Utilisateur</dt>
+            <dd class="col-sm-9">@Model.UserFullName</dd>
+        </dl>
+        <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Retour à la liste</a>
+    </div>
+</div>

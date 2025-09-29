@@ -1,0 +1,51 @@
+@model PFE_Etudiant_Asteelflash.Models.Qrqc.QuantiteChartViewModel
+@{
+    ViewData["Title"] = $"Diagramme des quantités triées – QRQC {Model.QrqcId}";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // adapte si le layout diffère
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+
+    <canvas id="quantiteChart" width="400" height="250"></canvas>
+
+    <a asp-action="Details" asp-route-id="@Model.QrqcId" class="btn btn-secondary mt-3">
+        <i class="fas fa-arrow-left"></i> Retour aux détails
+    </a>
+</div>
+
+<!-- Chart.js CDN (version 4) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+    (function () {
+        const data = [@Model.Jour1, @Model.Jour2, @Model.Jour3, @Model.Jour4, @Model.Jour5];
+        const ctx = document.getElementById('quantiteChart');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jour 1', 'Jour 2', 'Jour 3', 'Jour 4', 'Jour 5'],
+                datasets: [{
+                    label: 'Quantité triée',
+                    data: data,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Pièces'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    })();
+</script>

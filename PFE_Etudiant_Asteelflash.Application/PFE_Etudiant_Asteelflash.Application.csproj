@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Day3\ActionImmediateGlobale\" />
+    <Folder Include="Day3\ContenirD3\" />
+    <Folder Include="Day3\Equipe\Dtos\" />
+    <Folder Include="Day3\Equipe\Interfaces\" />
+    <Folder Include="Day3\Equipe\Mapping\" />
+    <Folder Include="Day3\Equipe\Services\" />
+    <Folder Include="Day3\TrierD3\" />
+    <Folder Include="Day3\QuantitéTriéeParJour\" />
+    <Folder Include="Day3\TriActionImmediateGlobale\" />
+    <Folder Include="Fnc\Dtos\" />
+    <Folder Include="Fnc\Mapping\" />
+    <Folder Include="Day2\" />
+    <Folder Include="Day5\" />
+    <Folder Include="Day6\" />
+    <Folder Include="Day7\" />
+    <Folder Include="Day8\" />
+    <Folder Include="Réclamation\Dtos\" />
+    <Folder Include="Réclamation\Interfaces\" />
+    <Folder Include="Réclamation\Mapping\" />
+    <Folder Include="Réclamation\Services\" />
+    <Folder Include="Zap\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PFE_Etudiant_Asteelflash.Domain\PFE_Etudiant_Asteelflash.Domain.csproj" />
+    <ProjectReference Include="..\PFE_Etudiant_Asteelflash.Infrastucture\PFE_Etudiant_Asteelflash.Infrastucture.csproj" />
+  </ItemGroup>
+
+</Project>

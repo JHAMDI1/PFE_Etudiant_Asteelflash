@@ -1,0 +1,18 @@
+@* Navigation menu for QRQC Day1 to Day8 pages. Each day is represented by a Bootstrap split dropdown.
+   Reuse this partial in all Day views to maintain consistent navigation. *@
+@{
+    // Retrieve current FNC Id from ViewData if provided so that links can be pre-filled
+    var fncId = ViewData["FNCId"] as int?;
+    string fncSegment = fncId.HasValue ? $"/{fncId}" : "";
+    var colors = new[] { "primary", "secondary", "success", "info", "warning", "danger", "dark", "light" };
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p1CmS5S5cp3tEUEfJw8blnq6ElTWHrZm79ut5Dd4sSntCn8T1tYF0GfbSxFY1GcYnXGz8Q9VQX1sxAJm+KK1hA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<div class="btn-toolbar mb-3" role="toolbar">
+    @{
+    // Pas de liens externes : simple boucle pour ancrer dans la page wizard
+    }
+    @for (int day = 1; day <= 8; day++)
+    {
+        <a class="btn btn-@colors[day-1] mr-2 mb-1 wizard-nav" data-day="@day" href="@($"#Day{day}Section")">D@day</a>
+    }
+</div>

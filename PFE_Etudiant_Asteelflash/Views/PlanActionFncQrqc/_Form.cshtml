@@ -1,0 +1,25 @@
+@using PFE_Etudiant_Asteelflash.Application.PlanAction.Dtos
+@model PlanActionFncQrqcDto
+
+<input asp-for="FncId" type="hidden" />
+
+<div class="form-group">
+    <label asp-for="DateCreationDoc" class="control-label"></label>
+    <input asp-for="DateCreationDoc" type="date" class="form-control" />
+</div>
+<div class="form-group">
+    <label asp-for="TauxClotureActions" class="control-label"></label>
+    <input asp-for="TauxClotureActions" class="form-control" type="number" step="0.01" />
+</div>
+<div class="form-group">
+    <label asp-for="TauxRespectDelais" class="control-label"></label>
+    <input asp-for="TauxRespectDelais" class="form-control" type="number" step="0.01" />
+</div>
+<div class="form-group">
+    <label asp-for="TauxEfficacite" class="control-label"></label>
+    <input asp-for="TauxEfficacite" class="form-control" type="number" step="0.01" />
+</div>
+<div class="form-group">
+    <label asp-for="NombreActions" class="control-label"></label>
+    <input asp-for="NombreActions" class="form-control" type="number" />
+</div>

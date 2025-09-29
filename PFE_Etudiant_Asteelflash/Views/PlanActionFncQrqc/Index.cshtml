@@ -1,0 +1,39 @@
+@using PFE_Etudiant_Asteelflash.Application.PlanAction.Dtos
+@model IEnumerable<PlanActionFncQrqcDto>
+@{
+    ViewData["Title"] = "Plan d'action";
+}
+
+<h1 class="mb-4">Plan d'action FNC/QRQC</h1>
+
+<table class="table table-striped table-bordered">
+    <thead class="thead-light">
+        <tr>
+            <th>Id</th>
+            <th>Date création</th>
+            <th># Actions</th>
+            <th>Taux clôture</th>
+            <th>Taux délais</th>
+            <th>Taux efficacité</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.DateCreationDoc.ToString("dd/MM/yyyy")</td>
+                <td>@item.NombreActions</td>
+                <td>@item.TauxClotureActions?.ToString("P0")</td>
+                <td>@item.TauxRespectDelais?.ToString("P0")</td>
+                <td>@item.TauxEfficacite?.ToString("P0")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info mr-1">Détails</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning mr-1">Éditer</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Supprimer</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

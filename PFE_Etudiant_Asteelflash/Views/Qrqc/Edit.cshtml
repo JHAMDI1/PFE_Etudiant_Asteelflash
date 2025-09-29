@@ -1,0 +1,80 @@
+@model PFE_Etudiant_Asteelflash.Models.Qrqc.QrqcEditViewModel
+
+@{
+    ViewData["Title"] = "Modifier QRQC";
+}
+
+<h2 class="mt-3">Modifier QRQC – Quantité triée par jour & Équipe</h2>
+
+<form asp-action="Edit" method="post" class="mt-4">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="QrqcId" />
+    <input type="hidden" asp-for="QuantiteId" />
+
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Quantité triée par jour</h4>
+            <div class="form-group mb-2">
+                <label asp-for="Jour1" class="form-label"></label>
+                <input asp-for="Jour1" class="form-control" />
+                <span asp-validation-for="Jour1" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="Jour2" class="form-label"></label>
+                <input asp-for="Jour2" class="form-control" />
+                <span asp-validation-for="Jour2" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="Jour3" class="form-label"></label>
+                <input asp-for="Jour3" class="form-control" />
+                <span asp-validation-for="Jour3" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="Jour4" class="form-label"></label>
+                <input asp-for="Jour4" class="form-control" />
+                <span asp-validation-for="Jour4" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Jour5" class="form-label"></label>
+                <input asp-for="Jour5" class="form-control" />
+                <span asp-validation-for="Jour5" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="mt-4">Équipe</h4>
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Membre</th>
+                <th>Fonction</th>
+                <th class="text-center">Absent</th>
+            </tr>
+        </thead>
+        <tbody>
+        @for (int i = 0; i < Model.Equipes.Count; i++)
+        {
+            <tr>
+                <td>
+                    @Model.Equipes[i].MemberName
+                    <input type="hidden" asp-for="Equipes[i].Id" />
+                    <input type="hidden" asp-for="Equipes[i].MemberName" />
+                    <input type="hidden" asp-for="Equipes[i].Fonction" />
+                </td>
+                <td>@Model.Equipes[i].Fonction</td>
+                <td class="text-center">
+                    <input asp-for="Equipes[i].IsAbsent" />
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <a asp-action="Details" asp-route-id="@Model.QrqcId" class="btn btn-secondary ms-2">Annuler</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,44 @@
+@using PFE_Etudiant_Asteelflash.Domain.Entities
+@using PFE_Etudiant_Asteelflash.Domain.Enums
+@model ApplicationUser
+
+@{
+    ViewData["Title"] = "Modifier l'utilisateur";
+}
+
+<h2 class="mb-3">Modifier l'utilisateur</h2>
+
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group mb-2">
+        <label>Prénom</label>
+        <input class="form-control" name="firstName" value="@Model.FirstName" required />
+    </div>
+    <div class="form-group mb-2">
+        <label>Nom</label>
+        <input class="form-control" name="lastName" value="@Model.LastName" required />
+    </div>
+    <div class="form-group mb-2">
+        <label>Email</label>
+        <input type="email" class="form-control" name="email" value="@Model.Email" required />
+    </div>
+    <div class="form-group mb-2">
+        <label>Matricule</label>
+        <input class="form-control" name="matricule" value="@Model.Matricule" required />
+    </div>
+    <div class="form-group mb-2">
+        <label>Fonction</label>
+        <select asp-for="Fonction" class="form-control" asp-items="Html.GetEnumSelectList<Fonction>()"></select>
+    </div>
+    <div class="form-group form-check mb-2">
+        <input type="checkbox" class="form-check-input" id="isActiveChk" name="isActive" @(Model.IsActive ? "checked" : string.Empty) />
+        <label class="form-check-label" for="isActiveChk">Actif</label>
+    </div>
+    <div class="form-group mb-3">
+        <label>Nouveau mot de passe (laisser vide pour ne pas changer)</label>
+        <input type="password" class="form-control" name="newPassword" />
+    </div>
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">Annuler</a>
+</form>

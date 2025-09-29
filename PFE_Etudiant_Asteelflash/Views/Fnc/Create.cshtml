@@ -1,0 +1,450 @@
+@* ------------------------------------------------------------
+   Vue Create.cshtml
+   Formulaire de création d'une FNC. Utilise FncCreateViewModel et
+   envoie un POST vers FncController.Create avec upload d'images.
+   ------------------------------------------------------------ *@
+@model PFE_Etudiant_Asteelflash.Models.Fnc.FncCreateViewModel
+
+@{
+    ViewData["Title"] = "Créer une nouvelle FNC";
+}
+
+<div class="container">
+    <h1>@ViewData["Title"]</h1>
+    
+    <form id="createFncForm" method="post" enctype="multipart/form-data" asp-action="Create">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-file-alt text-primary mr-2"></i>
+                    Informations générales
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Ref" class="control-label">Référence</label>
+                            <input asp-for="Ref" class="form-control" />
+                            <span asp-validation-for="Ref" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ZapEmettriceId" class="control-label">ZAP émettrice</label>
+                            <select asp-for="ZapEmettriceId" class="form-control" asp-items="Model.ZapOptions">
+                                <option value="">-- Sélectionner la ZAP émettrice --</option>
+                            </select>
+                            <span asp-validation-for="ZapEmettriceId" class="text-danger"></span>
+                        </div>
+
+                        @if (Model.ConducteurOptions != null && Model.ConducteurOptions.Any())
+                        {
+                            <div class="form-group">
+                                <label asp-for="ConducteurId" class="control-label">Conducteur CMS</label>
+                                <select asp-for="ConducteurId" class="form-control" asp-items="Model.ConducteurOptions">
+                                    <option value="">-- Sélectionner un conducteur --</option>
+                                </select>
+                                <span asp-validation-for="ConducteurId" class="text-danger"></span>
+                            </div>
+                        }
+                        <div class="form-group">
+                            <label asp-for="ZapReceptriceId" class="control-label">ZAP réceptrice</label>
+                            <select asp-for="ZapReceptriceId" class="form-control" asp-items="Model.ZapOptions">
+                                <option value="">-- Sélectionner la ZAP réceptrice --</option>
+                            </select>
+                            <span asp-validation-for="ZapReceptriceId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Date" class="control-label">Date</label>
+                            <input asp-for="Date" class="form-control" type="date" />
+                            <span asp-validation-for="Date" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Hour" class="control-label">Heure</label>
+                            <input asp-for="Hour" class="form-control" type="time" />
+                            <span asp-validation-for="Hour" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="TransmitterFullName" class="control-label">Émetteur</label>
+                            <input asp-for="TransmitterFullName" class="form-control" disabled />
+                            <input asp-for="TransmitterId" type="hidden" />
+                        </div>
+
+
+
+
+                        <div id="detectionLocGroup" class="form-group d-none">
+                            <label asp-for="Detection_loc" class="control-label">Lieu de détection</label>
+                            <input asp-for="Detection_loc" class="form-control" />
+                            <span asp-validation-for="Detection_loc" class="text-danger"></span>
+                        </div>
+                        <div id="cmsLineGroup" class="form-group d-none">
+                            <label asp-for="SelectedCMSLine" class="control-label">Ligne CMS</label>
+                            <select asp-for="SelectedCMSLine" class="form-control" asp-items="Model.CMSLineOptions">
+                                <option value="">-- Sélectionner la ligne CMS --</option>
+                            </select>
+                            <span asp-validation-for="SelectedCMSLine" class="text-danger"></span>
+                        </div>
+                                                <!-- Groupe Vague -->
+                        <div id="vagueLineGroup" class="form-group d-none">
+                            <label asp-for="SelectedVagueLine" class="control-label">Ligne Vague</label>
+                            <select asp-for="SelectedVagueLine" class="form-control" asp-items="Model.VagueLineOptions">
+                                <option value="">-- Sélectionner la ligne Vague --</option>
+                            </select>
+                            <span asp-validation-for="SelectedVagueLine" class="text-danger"></span>
+                        </div>
+                        <!-- Groupe Préparation -->
+                        <div id="preparationLineGroup" class="form-group d-none">
+                            <label asp-for="SelectedPreparationLine" class="control-label">Ligne Préparation</label>
+                            <select asp-for="SelectedPreparationLine" class="form-control" asp-items="Model.PreparationLineOptions">
+                                <option value="">-- Sélectionner la ligne Préparation --</option>
+                            </select>
+                            <span asp-validation-for="SelectedPreparationLine" class="text-danger"></span>
+                        </div>
+                        <!-- Groupe Client pour Intégration -->
+                        <div id="clientGroup" class="form-group d-none">
+                            <label asp-for="Client_name" class="control-label">Client</label>
+                            <input asp-for="Client_name" class="form-control" />
+                            <span asp-validation-for="Client_name" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-exclamation-triangle text-warning mr-2"></i>
+                    Détails de la non-conformité
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Description" class="control-label">Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Nouveaux champs: Énoncé de la réclamation et Pourquoi -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Enonce_de_la_reclamaion" class="control-label">Énoncé de la réclamation</label>
+                            <textarea asp-for="Enonce_de_la_reclamaion" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Enonce_de_la_reclamaion" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="pour_quoi" class="control-label">Pourquoi</label>
+                            <textarea asp-for="pour_quoi" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="pour_quoi" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Quantity_NOK" class="control-label">Quantité non conforme</label>
+                            <input asp-for="Quantity_NOK" class="form-control" type="number" min="0" />
+                            <span asp-validation-for="Quantity_NOK" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Bilan_de_tri" class="control-label">Bilan de tri</label>
+                            <div class="form-check">
+                                <input asp-for="Bilan_de_tri" class="form-check-input" type="checkbox" />
+                                <label class="form-check-label" for="Bilan_de_tri">Effectué</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="TypeDefaut" class="control-label">Type de défaut</label>
+                            <select asp-for="TypeDefaut" class="form-control" asp-items="Model.TypeDefautOptions">
+                                <option value="">-- Sélectionner un type de défaut --</option>
+                            </select>
+                            <span asp-validation-for="TypeDefaut" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TypeFnc" class="control-label">Type de FNC</label>
+                            <select asp-for="TypeFnc" class="form-control" asp-items="Model.TypeOptions">
+                                <option value="">-- Sélectionner un type --</option>
+                            </select>
+                            <span asp-validation-for="TypeFnc" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="NcImpact" class="control-label">Impact NC</label>
+                            <select asp-for="NcImpact" class="form-control" asp-items="Model.NcImpactOptions">
+                                <option value="">-- Sélectionner un impact --</option>
+                            </select>
+                            <span asp-validation-for="NcImpact" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="ActionImmediate" class="control-label">Action immédiate</label>
+                            <select asp-for="ActionImmediate" class="form-control" asp-items="Model.ActionImmediateOptions">
+                                <option value="">-- Sélectionner une action --</option>
+                            </select>
+                            <span asp-validation-for="ActionImmediate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Champs conditionnels liés à Action immédiate -->
+                <div id="triFields" class="row d-none">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Tri_Ok" class="control-label"></label>
+                            <input asp-for="Tri_Ok" class="form-control" type="number" min="0" />
+                            <span asp-validation-for="Tri_Ok" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Tri_NOk" class="control-label"></label>
+                            <input asp-for="Tri_NOk" class="form-control" type="number" min="0" />
+                            <span asp-validation-for="Tri_NOk" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="derogField" class="row d-none">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Numero_dérogation" class="control-label"></label>
+                            <input asp-for="Numero_dérogation" class="form-control" type="number" min="0" />
+                            <span asp-validation-for="Numero_dérogation" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="reparationField" class="row d-none">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Action_de_reparation" class="control-label"></label>
+                            <input asp-for="Action_de_reparation" class="form-control" />
+                            <span asp-validation-for="Action_de_reparation" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="rebutField" class="row d-none">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Quantite_Rebut" class="control-label"></label>
+                            <input asp-for="Quantite_Rebut" class="form-control" type="number" min="0" />
+                            <span asp-validation-for="Quantite_Rebut" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="isolationField" class="row d-none">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Quantite_Isoloation_de_lot" class="control-label"></label>
+                            <input asp-for="Quantite_Isoloation_de_lot" class="form-control" type="number" min="0" />
+                            <span asp-validation-for="Quantite_Isoloation_de_lot" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="ImageFile_Piece_bonne" class="control-label">Image pièce bonne</label>
+                            <input type="file" class="form-control-file" asp-for="ImageFile_Piece_bonne" />
+                            <span asp-validation-for="ImageFile_Piece_bonne" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ImageFile_Piece_Mauvaise" class="control-label">Image pièce mauvaise</label>
+                            <input type="file" class="form-control-file" asp-for="ImageFile_Piece_Mauvaise" />
+                            <span asp-validation-for="ImageFile_Piece_Mauvaise" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ImageFile_3" class="control-label">Image 3</label>
+                            <input type="file" class="form-control-file" asp-for="ImageFile_3" />
+                            <span asp-validation-for="ImageFile_3" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ImageFile_4" class="control-label">Image 4</label>
+                            <input type="file" class="form-control-file" asp-for="ImageFile_4" />
+                            <span asp-validation-for="ImageFile_4" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ImageFile_5" class="control-label">Image 5</label>
+                            <input type="file" class="form-control-file" asp-for="ImageFile_5" />
+                            <span asp-validation-for="ImageFile_5" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left mr-1"></i> Retour à la liste
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save mr-1"></i> Enregistrer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function () {
+            // Validation et comportements client uniquement
+            console.log('Formulaire initialisé avec succès');
+            
+            // Mise à jour de la couleur des listes déroulantes (sélects non choisis en gris)
+            function updateSelectColor($select) {
+                if ($select.val() === '') {
+                    $select.css('color', 'gray');
+                } else {
+                    $select.css('color', '#495057'); // Couleur standard Bootstrap
+                }
+            }
+
+            // Initialiser et réévaluer la couleur de toutes les listes à chaque changement
+            function refreshAllSelectColors() {
+                $('select').each(function () {
+                    updateSelectColor($(this));
+                });
+            }
+
+            refreshAllSelectColors();
+
+            // Affichage conditionnel des champs liés à l'Action immédiate
+            function updateConditionalFields() {
+                const val = $('#ActionImmediate').val();
+                const txt = $('#ActionImmediate option:selected').text().trim();
+
+                // Masquer toutes les zones
+                $('#triFields, #derogField, #reparationField, #rebutField, #isolationField').addClass('d-none');
+
+                // Mapping des valeurs possibles (texte ou valeur numérique) vers le bloc à afficher
+                const mapping = {
+                    'Tri': '#triFields',
+                    '0': '#triFields',
+                    'Acceptation_en_etat': '#derogField',
+                    '1': '#derogField',
+                    'Isolation_du_lot': '#isolationField',
+                    '2': '#isolationField',
+                    'Remise_en_Conformité': '#reparationField',
+                    '3': '#reparationField',
+                    'Rebut': '#rebutField',
+                    '4': '#rebutField'
+                };
+
+                // Afficher le bloc si une correspondance est trouvée
+                if (mapping[val]) {
+                    $(mapping[val]).removeClass('d-none');
+                } else if (mapping[txt]) {
+                    $(mapping[txt]).removeClass('d-none');
+                }
+            }
+
+            // Initialiser l'état au chargement
+            updateConditionalFields();
+
+            // Mettre à jour lors du changement
+            $('#ActionImmediate').on('change', updateConditionalFields);
+
+            // ---------- ZAP émettrice : affichage conditionnel ----------
+            function updateZapFields() {
+                const zapText = $('#ZapEmettriceId option:selected').text().trim().toLowerCase();
+                $('#cmsLineGroup, #vagueLineGroup, #preparationLineGroup, #integrationLineGroup, #detectionLocGroup, #clientGroup').addClass('d-none');
+
+                if (zapText === 'cms') {
+                    $('#cmsLineGroup').removeClass('d-none');
+                    $('#detectionLocGroup').removeClass('d-none');
+                } else if (zapText === 'vague') {
+                    $('#vagueLineGroup').removeClass('d-none');
+                    $('#detectionLocGroup').removeClass('d-none');
+                } else if (zapText === 'preparation') {
+                    $('#preparationLineGroup').removeClass('d-none');
+                    $('#detectionLocGroup').removeClass('d-none');
+                } else if (zapText === 'integration') {
+                    $('#clientGroup').removeClass('d-none');
+                    $('#detectionLocGroup').removeClass('d-none');
+                }
+            }
+            // État initial
+            updateZapFields();
+            // Mettre à jour lors du changement de ZAP émettrice
+            $('#ZapEmettriceId').on('change', updateZapFields);
+
+            $('select').on('change', function () {
+                refreshAllSelectColors();
+            });
+            
+
+            // Le formulaire est maintenant géré par une soumission traditionnelle
+            // Le contrôleur s'occupe du traitement et de la redirection
+        });
+    </script>
+
+    <style>
+        /* Amélioration de l'alignement des champs */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .form-control {
+            height: calc(1.5em + 0.75rem + 2px);
+        }
+        
+        /* Standardisation des listes déroulantes */
+        select.form-control {
+            appearance: auto;
+            -webkit-appearance: auto;
+            padding-right: 2rem;
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 16px 12px;
+        }
+        
+        /* Alignement vertical des labels */
+        .control-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        /* Alignement des rangées */
+        .row {
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Uniformiser la hauteur des options des listes déroulantes */
+        option {
+            padding: 8px;
+        }
+        
+        /* Espacement des cartes */
+        .card {
+            margin-bottom: 2rem;
+        }
+        
+        /* Style cohérent pour les champs date/time */
+        input[type="date"], 
+        input[type="time"] {
+            min-height: calc(1.5em + 0.75rem + 2px);
+        }
+    </style>
+}

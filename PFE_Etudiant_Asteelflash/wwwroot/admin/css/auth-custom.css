@@ -1,0 +1,67 @@
+/* auth-custom.css - Styles personnalisés pour les pages d'authentification */
+
+.auth.auth-bg-1 {
+    background: linear-gradient(135deg, #673ab7, #9c27b0);
+}
+
+.auto-form-wrapper {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+.auth-footer {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-top: 30px;
+    justify-content: center;
+}
+
+.auth-footer li {
+    margin: 0 15px;
+}
+
+.auth-footer a {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+}
+
+.footer-text {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+}
+
+.brand-logo img {
+    height: 60px;
+}
+
+/* Styles pour les champs de formulaire */
+.input-group-text {
+    background-color: transparent !important;
+    border-right: 0 !important;
+}
+
+.form-control-lg.border-left-0 {
+    border-left: 0 !important;
+}
+
+.btn-gradient-primary {
+    background: linear-gradient(to right, #da8cff, #9a55ff);
+    border: 0;
+}
+
+.btn-gradient-primary:hover {
+    background: linear-gradient(to right, #9a55ff, #da8cff);
+}
+
+.text-primary {
+    color: #9a55ff !important;
+}
+
+.text-center.mb-4 {
+    color: #3c4858;
+    font-weight: 500;
+}

@@ -1,0 +1,1131 @@
+@model PFE_Etudiant_Asteelflash.Models.Qrqc.QrqcCreateViewModel
+
+@{
+    ViewData["Title"] = "Créer QRQC";
+}
+
+<style>
+/* Styles spécifiques à la page de création QRQC */
+.container.qrqc-create {
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1.05rem;
+}
+
+.container.qrqc-create h2 {
+    font-size: 2rem;
+    text-align: center;
+}
+
+.container.qrqc-create .card-header h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.container.qrqc-create table th,
+.container.qrqc-create table td,
+.container.qrqc-create label,
+.container.qrqc-create input,
+.container.qrqc-create select,
+.container.qrqc-create textarea {
+    font-size: 1rem;
+}
+
+.container.qrqc-create .btn {
+    font-size: 0.95rem;
+}
+</style>
+
+<div class="container qrqc-create">
+    <h2>@ViewData["Title"]</h2>
+    <hr />
+    <div class="row">
+        <div class="col-12">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                
+                <!-- Bloc QRQC -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="mb-0">QRQC</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- FNC Id (readonly) -->
+                        <div class="form-group">
+                            <label asp-for="FNCId" class="control-label"></label>
+                            <input asp-for="FNCId" class="form-control" readonly />
+                            <span asp-validation-for="FNCId" class="text-danger"></span>
+                        </div>
+
+                        <!-- Client Name (optionnel) -->
+                        @if (!string.IsNullOrEmpty(Model.Client_name))
+                        {
+                            <div class="form-group">
+                                <label asp-for="Client_name" class="control-label"></label>
+                                <input asp-for="Client_name" class="form-control" readonly />
+                                <span asp-validation-for="Client_name" class="text-danger"></span>
+                            </div>
+                        }
+
+                        <!-- Nature de défaut -->
+                        <div class="form-group">
+                            <label asp-for="NatureDefaut" class="control-label"></label>
+                            @Html.DropDownListFor(m => m.NatureDefaut, Model.NatureDefautOptions, "-- Sélectionner --", new { @class = "form-control" })
+                            <span asp-validation-for="NatureDefaut" class="text-danger"></span>
+                        </div>
+
+                        <!-- Alerte Qualité -->
+                        <div class="form-group form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="AlerteQualite" /> @Html.DisplayNameFor(model => model.AlerteQualite)
+                            </label>
+                        </div>
+
+                        <!-- Processor ID (readonly) -->
+                        <div class="form-group">
+                            <label asp-for="ProcessorID" class="control-label"></label>
+                            <input asp-for="ProcessorID" class="form-control" readonly />
+                            <span asp-validation-for="ProcessorID" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Description du problème (D2) -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="mb-0">Description du problème (D2)</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Problème -->
+                        <div class="form-group">
+                            <label asp-for="Probleme" class="control-label"></label>
+                            <textarea asp-for="Probleme" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Probleme" class="text-danger"></span>
+                        </div>
+
+                        <!-- Detecteur -->
+                        <div class="form-group">
+                            <label asp-for="Detecteur" class="control-label"></label>
+                            <input asp-for="Detecteur" class="form-control" />
+                            <span asp-validation-for="Detecteur" class="text-danger"></span>
+                        </div>
+
+                        <!-- Lieu de détection -->
+                        <div class="form-group">
+                            <label asp-for="LieuDeDetection" class="control-label"></label>
+                            <input asp-for="LieuDeDetection" class="form-control" />
+                            <span asp-validation-for="LieuDeDetection" class="text-danger"></span>
+                        </div>
+
+                        <!-- Date et Heure -->
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label asp-for="Date" class="control-label"></label>
+                                    <input asp-for="Date" type="date" class="form-control" />
+                                    <span asp-validation-for="Date" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label asp-for="Heure" class="control-label"></label>
+                                    <input asp-for="Heure" type="time" class="form-control" />
+                                    <span asp-validation-for="Heure" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Manière de détection -->
+                        <div class="form-group">
+                            <label asp-for="ManiereDeDetection" class="control-label"></label>
+                            <input asp-for="ManiereDeDetection" class="form-control" />
+                            <span asp-validation-for="ManiereDeDetection" class="text-danger"></span>
+                        </div>
+
+                        <!-- Nombre de pièces concernées -->
+                        <div class="form-group">
+                            <label asp-for="NbreDePiecesConcernes" class="control-label"></label>
+                            <input asp-for="NbreDePiecesConcernes" class="form-control" />
+                            <span asp-validation-for="NbreDePiecesConcernes" class="text-danger"></span>
+                        </div>
+
+                        <!-- Raison du problème -->
+                        <div class="form-group">
+                            <label asp-for="RaisonDuProbleme" class="control-label"></label>
+                            <textarea asp-for="RaisonDuProbleme" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="RaisonDuProbleme" class="text-danger"></span>
+                        </div>
+
+                        <!-- Récurrent -->
+                        <div class="form-group form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="ReccurenceDuProbleme" /> @Html.DisplayNameFor(model => model.ReccurenceDuProbleme)
+                            </label>
+                        </div>
+
+                        <!-- Risque -->
+                        <div class="form-group form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="Risque" /> @Html.DisplayNameFor(model => model.Risque)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3 CreateActionDeSecurisationD3Dto -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="mb-0">Action D3</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Action -->
+                        <div class="form-group">
+                            <label asp-for="Action" class="control-label"></label>
+                            @Html.DropDownListFor(m => m.Action, Model.ActionD3Options, "-- Sélectionner --", new { @class = "form-control" })
+                            <span asp-validation-for="Action" class="text-danger"></span>
+                        </div>
+
+                        <!-- Type de réclamation -->
+                        <div class="form-group">
+                            <label asp-for="TypeReclamation" class="control-label"></label>
+                            @Html.DropDownListFor(m => m.TypeReclamation, Model.TypeReclamationOptions, "-- Sélectionner --", new { @class = "form-control" })
+                            <span asp-validation-for="TypeReclamation" class="text-danger"></span>
+                        </div>
+
+                        
+                    </div>
+                </div>
+
+                <!-- 4 CreateActionImmediateGlobaleDto -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="mb-0">Action Immédiate Globale</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Tableau Action Immédiate Globale -->
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Actions immédiates (&lt;24h)</th>
+                                    <th class="text-center">OK</th>
+                                    <th class="text-center">NOK</th>
+                                    <th class="text-center">N/A</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Stopper tous les lots suspects, les isoler et les identifier</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ContenirStopperGlobale, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ContenirStopperGlobale, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ContenirStopperGlobale, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA)</td>
+                                </tr>
+                                <tr>
+                                    <td>Déroulement d'une réunion d'information pour les opérateurs</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ContenirDeroulementGlobale, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ContenirDeroulementGlobale, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ContenirDeroulementGlobale, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA)</td>
+                                </tr>
+                                <tr>
+                                    <td>Déclenchement et suivi de la réparation</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ReparerDeclenchementGlobale, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ReparerDeclenchementGlobale, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ReparerDeclenchementGlobale, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Les radio-boutons du tableau suffisent -->                       
+                        <br />
+                        <!-- Conclusion du tri -->
+                        <div class="form-group">
+                            <label asp-for="ConclusionTri" class="control-label"></label>
+                            <textarea asp-for="ConclusionTri" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="ConclusionTri" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+<!-- 5 CreateTriActionImmediateGlobaleDto -->
+<div id="tri-container">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="mb-0">Tri Action Immédiate Globale</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Tableau Tri Action Immédiate Globale -->
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Zone</th>
+                                    <th>Nombre pièces triées</th>
+                                    <th>Nombre pièces totales</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input name="TriActions[0].Zone" class="form-control" />
+                                        <span asp-validation-for="Zone" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        <input name="TriActions[0].NombrePieceTrie" type="number" min="0" class="form-control" />
+                                        <span asp-validation-for="NombrePieceTrie" class="text-danger"></span>
+                                    </td>
+                                    <td>
+                                        <input name="TriActions[0].NombrePieceTotale" type="number" min="0" class="form-control" />
+                                        <span asp-validation-for="NombrePieceTotale" class="text-danger"></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        
+                    </div>
+                </div>
+
+                </div> <!-- end tri-container -->
+<button type="button" id="add-tri" class="btn btn-sm btn-primary mb-3">+ Ajouter un tri</button>
+
+<!-- 6 CreateQuantitéTriéeParJourDto -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="mb-0">Quantité triée par jour</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col">
+                                <label asp-for="Jour1" class="control-label"></label>
+                                <input asp-for="Jour1" class="form-control" />
+                                <span asp-validation-for="Jour1" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                                <label asp-for="Jour2" class="control-label"></label>
+                                <input asp-for="Jour2" class="form-control" />
+                                <span asp-validation-for="Jour2" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                                <label asp-for="Jour3" class="control-label"></label>
+                                <input asp-for="Jour3" class="form-control" />
+                                <span asp-validation-for="Jour3" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                                <label asp-for="Jour4" class="control-label"></label>
+                                <input asp-for="Jour4" class="form-control" />
+                                <span asp-validation-for="Jour4" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                                <label asp-for="Jour5" class="control-label"></label>
+                                <input asp-for="Jour5" class="form-control" />
+                                <span asp-validation-for="Jour5" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7 CreateContenirD3Dto -->
+                <div class="card mb-4">
+                    <div class="card-header"><h4 class="mb-0">Contenir D3</h4></div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label asp-for="PiloteIDContenir" class="control-label"></label>
+                            @Html.DropDownListFor(m => m.PiloteIDContenir, Model.PiloteOptions, "-- Sélectionner --", new { @class = "form-control" })
+                            <span asp-validation-for="PiloteIDContenir" class="text-danger"></span>
+                        </div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Action</th>
+                                    <th class="text-center">OK</th>
+                                    <th class="text-center">NOK</th>
+                                    <th class="text-center">NA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Stopper / Isoler lots suspects</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ContenirStopper, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ContenirStopper, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ContenirStopper, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA)</td>
+                                </tr>
+                                <tr>
+                                    <td>Réunion d'information</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ContenirDeroulement, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ContenirDeroulement, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ContenirDeroulement, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA)</td>
+                                </tr>
+                                <tr>
+                                    <td>Ajout d'un super contrôle</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ContenirAjout, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ContenirAjout, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ContenirAjout, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 8 CreateTrierD3Dto -->
+                <div class="card mb-4">
+                    <div class="card-header"><h4 class="mb-0">Trier D3</h4></div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label asp-for="PiloteIDTrier" class="control-label"></label>
+                            @Html.DropDownListFor(m => m.PiloteIDTrier, Model.PiloteOptions, "-- Sélectionner --", new { @class = "form-control" })
+                            <span asp-validation-for="PiloteIDTrier" class="text-danger"></span>
+                        </div>
+                        <!-- Actions Trier -->
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Action</th>
+                                    <th class="text-center">OK</th>
+                                    <th class="text-center">NOK</th>
+                                    <th class="text-center">NA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Édition</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.TrierEdition, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.TrierEdition, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.TrierEdition, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA)</td>
+                                </tr>
+                                <tr>
+                                    <td>Formation</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.TrierFormation, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.TrierFormation, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.TrierFormation, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA)</td>
+                                </tr>
+                                <tr>
+                                    <td>Définition</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.TrierDefinition, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.TrierDefinition, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.TrierDefinition, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA)</td>
+                                </tr>
+                                <tr>
+                                    <td>Déclenchement</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.TrierDeclenchement, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.TrierDeclenchement, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.TrierDeclenchement, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA)</td>
+                                </tr>
+                                <tr>
+                                    <td>En Cours</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.TrierEnCours, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.TrierEnCours, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.TrierEnCours, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA)</td>
+                                </tr>
+                                <tr>
+                                    <td>Expédition</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.TrierExpedition, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.TrierExpedition, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.TrierExpedition, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 9 CreateReparerD3Dto -->
+                <div class="card mb-4">
+                    <div class="card-header"><h4 class="mb-0">Réparer D3</h4></div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label asp-for="PiloteID" class="control-label"></label>
+                            @Html.DropDownListFor(m => m.PiloteID, Model.PiloteOptions, "-- Sélectionner --", new { @class = "form-control" })
+                            <span asp-validation-for="PiloteID" class="text-danger"></span>
+                        </div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Action</th>
+                                    <th class="text-center">OK</th>
+                                    <th class="text-center">NOK</th>
+                                    <th class="text-center">NA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Édition</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ReparerEdition, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ReparerEdition, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ReparerEdition, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA)</td>
+                                </tr>
+                                <tr>
+                                    <td>Définition des Flux</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ReparerDefinitionDesFlux, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ReparerDefinitionDesFlux, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ReparerDefinitionDesFlux, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA)</td>
+                                </tr>
+                                <tr>
+                                    <td>Définition du Point</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ReparerDefinitionDuPoint, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ReparerDefinitionDuPoint, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ReparerDefinitionDuPoint, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA)</td>
+                                </tr>
+                                <tr>
+                                    <td>Formation</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ReparerFormation, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ReparerFormation, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ReparerFormation, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA)</td>
+                                </tr>
+                                <tr>
+                                    <td>Déclenchement</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ReparerDeclenchement, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ReparerDeclenchement, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.ReparerDeclenchement, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 10 CreateAssurerD3Dto -->
+                <div class="card mb-4">
+                    <div class="card-header"><h4 class="mb-0">Assurer D3</h4></div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label asp-for="PiloteIDAssurer" class="control-label"></label>
+                            @Html.DropDownListFor(m => m.PiloteIDAssurer, Model.PiloteOptions, "-- Sélectionner --", new { @class = "form-control" })
+                            <span asp-validation-for="PiloteIDAssurer" class="text-danger"></span>
+                        </div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Action</th>
+                                    <th class="text-center">OK</th>
+                                    <th class="text-center">NOK</th>
+                                    <th class="text-center">NA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Réunion</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.AssurerReunion, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.AssurerReunion, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.AssurerReunion, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA)</td>
+                                </tr>
+                                <tr>
+                                    <td>Audit</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.AssurerAudit, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.AssurerAudit, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK)</td>
+                                    <td class="text-center">@Html.RadioButtonFor(m => m.AssurerAudit, PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 11 CreateListeDesActionsD3Dto -->
+<div class="card mb-4">
+    <div class="card-header"><h4 class="mb-0">Liste des Actions D3</h4></div>
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Actions</th>
+                    <th>O/D</th>
+                    <th>Pilote</th>
+                    <th>Date prévue</th>
+                    <th>Date réelle</th>
+                    <th>Commentaires</th>
+                </tr>
+            </thead>
+            <tbody id="liste-actions-body">
+                <tr>
+                    <td><input name="ListeActions[0].Action" class="form-control" /></td>
+                    <td>
+                        <select name="ListeActions[0].StatusAction" class="form-control">
+                            @foreach (var opt in Model.StatusActionOptions)
+                            {
+                                <option value="@opt.Value">@opt.Text</option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <select name="ListeActions[0].PiloteID" class="form-control">
+                            @foreach (var opt in Model.PiloteOptions)
+                            {
+                                <option value="@opt.Value">@opt.Text</option>
+                            }
+                        </select>
+                    </td>
+                    <td><input name="ListeActions[0].DatePrevue" type="date" class="form-control" /></td>
+                    <td><input name="ListeActions[0].DateReelle" type="date" class="form-control" /></td>
+                    <td><textarea name="ListeActions[0].Commentaire" class="form-control" rows="1"></textarea></td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="button" id="add-action" class="btn btn-sm btn-primary mt-2">+ Ajouter une action</button>
+    </div>
+</div>
+
+                <!-- 12 CreateEquipeDto -->
+                <div id="equipe-container">
+                    <div class="card mb-4">
+                        <div class="card-header"><h4 class="mb-0">Equipe</h4></div>
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Membre</th>
+                                        <th>Fonction</th>
+                                        <th>Absent</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <select name="Equipes[0].UserId" class="form-control">
+                                                @foreach (var opt in Model.PiloteOptions)
+                                                {
+                                                    <option value="@opt.Value">@opt.Text</option>
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select name="Equipes[0].Fonction" class="form-control">
+                                                @foreach (var opt in Model.FonctionOptions)
+                                                {
+                                                    <option value="@opt.Value">@opt.Text</option>
+                                                }
+                                            </select>
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="hidden" name="Equipes[0].IsAbsent" value="false" />
+                                            <input name="Equipes[0].IsAbsent" type="checkbox" class="form-check-input" value="true" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" id="add-equipe" class="btn btn-sm btn-primary mb-3">+ Ajouter un membre</button>
+
+                <!-- 13 CreateCauseOccurenceD4Dto -->
+                <div id="cause-occurrence-container">
+    <div class="card mb-4">
+        <div class="card-header"><h4 class="mb-0">Cause Occurrence D4</h4></div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr><th>Pourquoi</th><th>Cause</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input name="CausesOccurence[0].Pourquoi" class="form-control" /></td>
+                        <td>@Html.DropDownList("CausesOccurence[0].Cause", Model.CauseOptions, "--", new { @class = "form-control" })</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<button type="button" id="add-cause-occurrence" class="btn btn-sm btn-primary mb-3">+ Ajouter une cause d'occurrence</button>
+
+                <!-- 14 CreateCausesNonDetectionD4Dto -->
+                <div id="cause-nondetection-container">
+    <div class="card mb-4">
+        <div class="card-header"><h4 class="mb-0">Causes Non Détection D4</h4></div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr><th>Pourquoi</th><th>Cause</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input name="CausesNonDetection[0].Pourquoi" class="form-control" /></td>
+                        <td>@Html.DropDownList("CausesNonDetection[0].Cause", Model.CauseOptions, "--", new { @class = "form-control" })</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<button type="button" id="add-cause-nondetection" class="btn btn-sm btn-primary mb-3">+ Ajouter une cause de non détection</button>
+
+                 <!-- 15 CreateRechercheCausesRacinesD4Dto -->
+                <div id="recherche-causes-container">
+                    <div class="card mb-4">
+                        <div class="card-header"><h4 class="mb-0">Recherche Causes Racines D4</h4></div>
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr><th>Action</th><th>O/D</th><th>Pilote</th><th>Date prévue</th><th>Date réelle</th><th>Évolution</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input name="RechercheCausesRacines[0].Action" class="form-control" /></td>
+                                        <td><input name="RechercheCausesRacines[0].OD" class="form-control" /></td>
+                                        <td>
+                                            <select name="RechercheCausesRacines[0].PiloteID" class="form-control">
+                                                @foreach (var opt in Model.PiloteOptions)
+                                                {
+                                                    <option value="@opt.Value">@opt.Text</option>
+                                                }
+                                            </select>
+                                        </td>
+                                        <td><input name="RechercheCausesRacines[0].DatePrevue" type="date" class="form-control" /></td>
+                                        <td><input name="RechercheCausesRacines[0].DateReelle" type="date" class="form-control" /></td>
+                                        <td><textarea name="RechercheCausesRacines[0].Evolution" class="form-control" rows="1"></textarea></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Button add cause racine -->
+                <button type="button" id="add-cause-racine" class="btn btn-sm btn-primary mb-3">+ Ajouter Cause Racine</button>
+
+                <!-- 16 CreatePlanActionsCorrectivesD5Dto -->
+                <div class="card mb-4">
+                    <div class="card-header"><h4 class="mb-0">Plan Actions Correctives D5</h4></div>
+                    <div class="card-body">
+                        <table class="table" id="plan-actions-container">
+                            <thead>
+                                <tr>
+                                    <th>Action Élimination Problème</th>
+                                    <th>Pilote</th>
+                                    <th>Date planifiée</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.PlanActionsCorrectives.Count; i++)
+                                {
+                                    <tr>
+                                        <td>
+                                            <input asp-for="PlanActionsCorrectives[i].ActionEliminationProbleme" class="form-control" />
+                                            <span asp-validation-for="PlanActionsCorrectives[i].ActionEliminationProbleme" class="text-danger"></span>
+                                        </td>
+                                        <td>
+                                            <select asp-for="PlanActionsCorrectives[i].PiloteID" class="form-control">
+                                                @foreach (var option in Model.PiloteOptions)
+                                                {
+                                                    <option value="@option.Value">@option.Text</option>
+                                                }
+                                            </select>
+                                            <span asp-validation-for="PlanActionsCorrectives[i].PiloteID" class="text-danger"></span>
+                                        </td>
+                                        <td>
+                                            <input asp-for="PlanActionsCorrectives[i].DatePlanifiee" class="form-control" type="date" />
+                                            <span asp-validation-for="PlanActionsCorrectives[i].DatePlanifiee" class="text-danger"></span>
+                                        </td>
+                                        <td>
+                                            @if (i > 0)
+                                            {
+                                                <button type="button" class="btn btn-danger remove-plan-action">Supprimer</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Button add Plan action -->
+                <button type="button" id="add-plan-action" class="btn btn-sm btn-primary mb-3">+ Ajouter Action</button>
+
+                <!-- 17 CreateSuiviD6Dto -->
+                <div class="card mb-4">
+                    <div class="card-header"><h4 class="mb-0">Suivi D6</h4></div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col">
+                                <label asp-for="Equipe1" class="control-label"></label>
+                                <input asp-for="Equipe1" class="form-control" />
+                                <span asp-validation-for="Equipe1" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                                <label asp-for="DateRealisation1" class="control-label"></label>
+                                <input asp-for="DateRealisation1" class="form-control" type="date" />
+                                <span asp-validation-for="DateRealisation1" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-row mt-2">
+                            <div class="col">
+                                <label asp-for="Equipe2" class="control-label"></label>
+                                <input asp-for="Equipe2" class="form-control" />
+                                <span asp-validation-for="Equipe2" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                                <label asp-for="DateRealisation2" class="control-label"></label>
+                                <input asp-for="DateRealisation2" class="form-control" type="date" />
+                                <span asp-validation-for="DateRealisation2" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-row mt-2">
+                            <div class="col">
+                                <label asp-for="Equipe3" class="control-label"></label>
+                                <input asp-for="Equipe3" class="form-control" />
+                                <span asp-validation-for="Equipe3" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                                <label asp-for="DateRealisation3" class="control-label"></label>
+                                <input asp-for="DateRealisation3" class="form-control" type="date" />
+                                <span asp-validation-for="DateRealisation3" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-row mt-2">
+                            <div class="col">
+                                <label asp-for="Equipe4" class="control-label"></label>
+                                <input asp-for="Equipe4" class="form-control" />
+                                <span asp-validation-for="Equipe4" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                                <label asp-for="DateRealisation4" class="control-label"></label>
+                                <input asp-for="DateRealisation4" class="form-control" type="date" />
+                                <span asp-validation-for="DateRealisation4" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-row mt-2">
+                            <div class="col">
+                                <label asp-for="Equipe5" class="control-label"></label>
+                                <input asp-for="Equipe5" class="form-control" />
+                                <span asp-validation-for="Equipe5" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                                <label asp-for="DateRealisation5" class="control-label"></label>
+                                <input asp-for="DateRealisation5" class="form-control" type="date" />
+                                <span asp-validation-for="DateRealisation5" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 18 CreateActD7Dto -->
+                <div class="card mb-4">
+                    <div class="card-header"><h4 class="mb-0">Act D7</h4></div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label asp-for="ConnaissanceExperience" class="control-label"></label>
+                            @Html.DropDownListFor(m => m.ConnaissanceExperience, Model.ConnaissanceExperienceOptions, "-- Sélectionner --", new { @class = "form-control" })
+                            <span asp-validation-for="ConnaissanceExperience" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Créer</button>
+                    <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/template" id="tri-template">
+        <div class="card mb-4">
+            <div class="card-header"><h4 class="mb-0">Tri Action Immédiate Globale</h4></div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr><th>Zone</th><th>Nombre pièces triées</th><th>Nombre pièces totales</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input name="TriActions[__index__].Zone" class="form-control" /></td>
+                            <td><input name="TriActions[__index__].NombrePieceTrie" type="number" min="0" class="form-control" /></td>
+                            <td><input name="TriActions[__index__].NombrePieceTotale" type="number" min="0" class="form-control" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var indexTri = 1; // compte les blocs Tri existants (0 déjà affiché)
+            var btnAdd = document.getElementById('add-tri');
+            if (btnAdd) {
+                btnAdd.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var template = document.getElementById('tri-template').innerHTML;
+                    var html = template.replace(/__index__/g, indexTri);
+                    var wrapper = document.createElement('div');
+                    wrapper.innerHTML = html;
+                    document.getElementById('tri-container').appendChild(wrapper);
+                    indexTri++;
+                });
+            }
+        });
+    </script>
+
+    <!-- Template Equipe -->
+    @{
+        var piloteOptionsMarkup = string.Join("", Model.PiloteOptions.Select(o => $"<option value='{o.Value}'>{o.Text}</option>"));
+        var fonctionOptionsMarkup = string.Join("", Model.FonctionOptions.Select(o => $"<option value='{o.Value}'>{o.Text}</option>"));
+    }
+    <script type="text/template" id="equipe-template">
+        <div class="card mb-4">
+            <div class="card-header"><h4 class="mb-0">Equipe</h4></div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Membre</th>
+                            <th>Fonction</th>
+                            <th>Absent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <select name="Equipes[__index__].UserId" class="form-control">
+                                    @Html.Raw(piloteOptionsMarkup)
+                                </select>
+                            </td>
+                            <td>
+                                <select name="Equipes[__index__].Fonction" class="form-control">
+                                        @Html.Raw(fonctionOptionsMarkup)
+                                    </select>
+                            </td>
+                            <td class="text-center">
+                                <input type="hidden" name="Equipes[__index__].IsAbsent" value="false" />
+                                <input name="Equipes[__index__].IsAbsent" type="checkbox" class="form-check-input" value="true" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var indexEquipe = 1; // bloc équipe 0 déjà présent
+            var btnAddEquipe = document.getElementById('add-equipe');
+            if (btnAddEquipe) {
+                btnAddEquipe.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var templateEquipe = document.getElementById('equipe-template').innerHTML;
+                    var htmlEquipe = templateEquipe.replace(/__index__/g, indexEquipe);
+                    var wrapperEquipe = document.createElement('div');
+                    wrapperEquipe.innerHTML = htmlEquipe;
+                    document.getElementById('equipe-container').appendChild(wrapperEquipe);
+                    indexEquipe++;
+                });
+            }
+        });
+    </script>
+
+    @{
+        var statusOptionsMarkup = string.Join("", Model.StatusActionOptions.Select(o => $"<option value='{o.Value}'>{o.Text}</option>"));
+        var causeOptionsMarkup = string.Join("", Model.CauseOptions.Select(o => $"<option value='{o.Value}'>{o.Text}</option>"));
+    }
+
+    <!-- Template Liste Actions D3 -->
+    <script type="text/template" id="action-template">
+        <tr>
+            <td><input name="ListeActions[__index__].Action" class="form-control" /></td>
+            <td>
+                <select name="ListeActions[__index__].StatusAction" class="form-control">
+                    @Html.Raw(statusOptionsMarkup)
+                </select>
+            </td>
+            <td>
+                <select name="ListeActions[__index__].PiloteID" class="form-control">
+                    @Html.Raw(piloteOptionsMarkup)
+                </select>
+            </td>
+            <td><input name="ListeActions[__index__].DatePrevue" type="date" class="form-control" /></td>
+            <td><input name="ListeActions[__index__].DateReelle" type="date" class="form-control" /></td>
+            <td><textarea name="ListeActions[__index__].Commentaire" class="form-control" rows="1"></textarea></td>
+        </tr>
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var indexAction = 1; // first row already present
+            var btnAddAction = document.getElementById('add-action');
+            if (btnAddAction) {
+                btnAddAction.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var templateAction = document.getElementById('action-template').innerHTML;
+                    var htmlAction = templateAction.replace(/__index__/g, indexAction);
+                    document.getElementById('liste-actions-body').insertAdjacentHTML('beforeend', htmlAction);
+                    indexAction++;
+                });
+            }
+        });
+    </script>
+
+    <!-- Template Cause Occurrence D4 -->
+    <script type="text/template" id="cause-occurrence-template">
+        <tr>
+            <td><input name="CausesOccurence[__index__].Pourquoi" class="form-control" /></td>
+            <td>
+                <select name="CausesOccurence[__index__].Cause" class="form-control">
+                    @Html.Raw(causeOptionsMarkup)
+                </select>
+            </td>
+        </tr>
+    </script>
+
+    <!-- Template Recherche Causes Racines D4 -->
+    <script type="text/template" id="cause-racine-template">
+        <tr>
+            <td><input name="RechercheCausesRacines[__index__].Action" class="form-control" /></td>
+            <td><input name="RechercheCausesRacines[__index__].OD" class="form-control" /></td>
+            <td>
+                <select name="RechercheCausesRacines[__index__].PiloteID" class="form-control">
+                    @Html.Raw(piloteOptionsMarkup)
+                </select>
+            </td>
+            <td><input name="RechercheCausesRacines[__index__].DatePrevue" type="date" class="form-control" /></td>
+            <td><input name="RechercheCausesRacines[__index__].DateReelle" type="date" class="form-control" /></td>
+            <td><textarea name="RechercheCausesRacines[__index__].Evolution" class="form-control" rows="1"></textarea></td>
+        </tr>
+    </script>
+
+    <!-- Template Causes Non Détection D4 -->
+    <script type="text/template" id="cause-nondetection-template">
+        <tr>
+            <td><input name="CausesNonDetection[__index__].Pourquoi" class="form-control" /></td>
+            <td>
+                <select name="CausesNonDetection[__index__].Cause" class="form-control">
+                    @Html.Raw(causeOptionsMarkup)
+                </select>
+            </td>
+        </tr>
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var indexCauseOccur = 1; // first row already present
+            var indexCauseNondet = 1;
+            var indexCauseRacine = 1;
+
+            var btnAddCauseOccur = document.getElementById('add-cause-occurrence');
+            if (btnAddCauseOccur) {
+                btnAddCauseOccur.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var template = document.getElementById('cause-occurrence-template').innerHTML;
+                    var html = template.replace(/__index__/g, indexCauseOccur);
+                    document.querySelector('#cause-occurrence-container tbody').insertAdjacentHTML('beforeend', html);
+                    indexCauseOccur++;
+                });
+            }
+
+            var btnAddCauseNondet = document.getElementById('add-cause-nondetection');
+            if (btnAddCauseNondet) {
+                btnAddCauseNondet.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var template = document.getElementById('cause-nondetection-template').innerHTML;
+                    var html = template.replace(/__index__/g, indexCauseNondet);
+                    document.querySelector('#cause-nondetection-container tbody').insertAdjacentHTML('beforeend', html);
+                    indexCauseNondet++;
+                });
+            }
+
+            var btnAddCauseRacine = document.getElementById('add-cause-racine');
+            if (btnAddCauseRacine) {
+                btnAddCauseRacine.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var template = document.getElementById('cause-racine-template').innerHTML;
+                    var html = template.replace(/__index__/g, indexCauseRacine);
+                    document.querySelector('#recherche-causes-container tbody').insertAdjacentHTML('beforeend', html);
+                    indexCauseRacine++;
+                });
+            }
+        });
+    </script>
+
+    <!-- Template PlanActionsCorrectives -->
+    <script type="text/template" id="plan-action-template">
+        <tr>
+            <td>
+                <input name="PlanActionsCorrectives[__index__].ActionEliminationProbleme"
+                       class="form-control" />
+            </td>
+            <td>
+                <select name="PlanActionsCorrectives[__index__].PiloteID"
+                        class="form-control">
+        @foreach (var opt in Model.PiloteOptions)
+        {
+                            <option value="@opt.Value">@opt.Text</option>
+        }
+                </select>
+            </td>
+            <td>
+                <input name="PlanActionsCorrectives[__index__].DatePlanifiee"
+                       type="date" class="form-control" />
+            </td>
+            <td>
+                <button type="button"
+                        class="btn btn-danger remove-plan-action">
+                    Supprimer
+                </button>
+            </td>
+        </tr>
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var indexPlanAction = @Model.PlanActionsCorrectives.Count;
+            
+            var btnAddPlanAction = document.getElementById('add-plan-action');
+            if (btnAddPlanAction) {
+                btnAddPlanAction.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var template = document.getElementById('plan-action-template').innerHTML;
+                    var html = template.replace(/__index__/g, indexPlanAction);
+                    document.querySelector('#plan-actions-container tbody').insertAdjacentHTML('beforeend', html);
+                    indexPlanAction++;
+                });
+            }
+            
+            // Delegation for remove buttons
+            document.addEventListener('click', function (e) {
+                if (e.target && e.target.classList.contains('remove-plan-action')) {
+                    e.preventDefault();
+                    var row = e.target.closest('tr');
+                    row.remove();
+                }
+            });
+        });
+    </script>
+
+    <script>
+        // Populate dropdown options
+        function populateDropdown(selectElement, options) {
+            options.forEach(option => {
+                const opt = document.createElement('option');
+                opt.value = option.Value;
+                opt.textContent = option.Text;
+                selectElement.appendChild(opt);
+            });
+        }
+
+        // Initialize Plan Actions
+        var indexPlanAction = @Model.PlanActionsCorrectives.Count;
+        var btnAddPlanAction = document.getElementById('add-plan-action');
+
+        if (btnAddPlanAction) {
+            btnAddPlanAction.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Clone template
+                var template = document.getElementById('plan-action-template').innerHTML;
+                var html = template.replace(/__index__/g, indexPlanAction);
+                var newRow = document.createElement('tr');
+                newRow.innerHTML = html;
+                
+                // Add to table
+                document.querySelector('#plan-actions-container tbody').appendChild(newRow);
+                
+                // Populate dropdown
+                var newSelect = newRow.querySelector('select[name*="PiloteID"]');
+                populateDropdown(newSelect, @Json.Serialize(Model.PiloteOptions));
+                
+                indexPlanAction++;
+            });
+        }
+    </script>
+}

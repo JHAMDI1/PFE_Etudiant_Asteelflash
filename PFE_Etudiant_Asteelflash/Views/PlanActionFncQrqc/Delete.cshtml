@@ -1,0 +1,22 @@
+@using PFE_Etudiant_Asteelflash.Application.PlanAction.Dtos
+@model PlanActionFncQrqcDto
+@{
+    ViewData["Title"] = "Supprimer le plan d'action";
+}
+
+<h1 class="text-danger">Confirmer la suppression</h1>
+<p>Êtes-vous certain de vouloir supprimer ce plan d'action ?</p>
+
+<table class="table table-bordered w-auto">
+    <tr><th>Id</th><td>@Model.Id</td></tr>
+    <tr><th>Date création</th><td>@Model.DateCreationDoc.ToString("dd/MM/yyyy")</td></tr>
+    <tr><th>Nombre actions</th><td>@Model.NombreActions</td></tr>
+    <tr><th>Taux clôture</th><td>@Model.TauxClotureActions?.ToString("P0")</td></tr>
+</table>
+
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Supprimer</button>
+    <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+</form>

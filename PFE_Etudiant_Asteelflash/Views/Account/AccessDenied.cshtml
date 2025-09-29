@@ -1,0 +1,16 @@
+@{
+    ViewData["Title"] = "Accès refusé";
+}
+
+<div class="container text-center mt-5">
+    <h1 class="display-4 text-danger">403 - Accès refusé</h1>
+    <p class="lead">Vous n’avez pas les autorisations nécessaires pour effectuer cette action.</p>
+    @if(ViewData["ReturnUrl"] != null)
+    {
+        <a class="btn btn-primary" asp-area="" asp-page="/Index" href="@ViewData["ReturnUrl"]">Retour</a>
+    }
+    else
+    {
+        <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Retour à l’accueil</a>
+    }
+</div>

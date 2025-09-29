@@ -1,0 +1,60 @@
+<!-- Views/Shared/_Sidebar.cshtml -->
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+  <ul class="nav">
+    <li class="nav-item nav-profile">
+      <a href="#" class="nav-link">
+        <div class="nav-profile-image">
+          <img src="~/purple-admin/assets/images/faces/face1.jpg" alt="profile">
+          <span class="login-status online"></span>
+        </div>
+        <div class="nav-profile-text d-flex flex-column">
+          <span class="font-weight-bold mb-2">Emna Ben Romdhane</span>
+          <span class="text-secondary text-small">Gestionnaire FNC</span>
+        </div>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/">
+        <span class="menu-title">Tableau de bord</span>
+        <i class="mdi mdi-home menu-icon"></i>
+      </a>
+    </li>
+    <!-- Menu FNC -->
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="collapse" href="#fnc-menu" aria-expanded="false" aria-controls="fnc-menu">
+        <span class="menu-title">Gestion FNC</span>
+        <i class="mdi mdi-clipboard-alert menu-icon"></i>
+      </a>
+      <div class="collapse" id="fnc-menu">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" asp-controller="Fnc" asp-action="Index">Liste des FNCs</a></li>
+          <li class="nav-item">
+            @if (User.IsInRole("Admin"))
+            {
+                <a class="nav-link" asp-controller="Admin" asp-action="Index"><i class="mdi mdi-account-multiple mr-1"></i> Espace Admin</a>
+            }
+            else
+            {
+                <a class="nav-link disabled text-muted" style="pointer-events:none;" href="#"><i class="mdi mdi-account-multiple-outline mr-1"></i> Espace Admin</a>
+            }
+          </li>
+          <li class="nav-item"> <a class="nav-link" asp-controller="Fnc" asp-action="Statistics">Statistiques</a></li>
+        </ul>
+      </div>
+    </li>
+    <!-- Gestion de suivi de tri -->
+    <li class="nav-item">
+      <a class="nav-link" asp-controller="TriFncQrqc" asp-action="Index">
+        <span class="menu-title">Gestion de suivi de tri</span>
+        <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+      </a>
+    </li>
+    <!-- Gestion des plans d'action -->
+    <li class="nav-item">
+      <a class="nav-link" asp-controller="PlanActionFncQrqc" asp-action="Index">
+        <span class="menu-title">Gestion des plans d'action</span>
+        <i class="mdi mdi-calendar-check menu-icon"></i>
+      </a>
+    </li>
+  </ul>
+</nav>

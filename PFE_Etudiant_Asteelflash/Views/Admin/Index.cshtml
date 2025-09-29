@@ -1,0 +1,44 @@
+@using PFE_Etudiant_Asteelflash.Domain.Entities
+@model IEnumerable<ApplicationUser>
+
+@{
+    ViewData["Title"] = "Gestion des utilisateurs";
+}
+
+<h2 class="mb-3">Gestion des utilisateurs</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Rôle</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@($"{user.FirstName} {user.LastName}")</td>
+                <td>@user.Email</td>
+                <td>@user.Fonction</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@user.Id" class="btn btn-sm btn-info">Détails</a>
+                    <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-sm btn-primary">Modifier</a>
+                    @if (user.IsActive)
+                    {
+                        <a asp-action="Delete" asp-route-id="@user.Id" class="btn btn-sm btn-danger">Désactiver</a>
+                    }
+                    else
+                    {
+                        <form asp-action="Activate" asp-route-id="@user.Id" method="post" style="display:inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-success">Activer</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

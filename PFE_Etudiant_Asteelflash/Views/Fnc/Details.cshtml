@@ -1,0 +1,319 @@
+@* ------------------------------------------------------------
+   Vue Details.cshtml
+   Affiche les informations détaillées d'une FNC, boutons d'action
+   (édition, approbation, annulation) selon rôle de l'utilisateur.
+   Utilise FncDetailsViewModel fourni par FncController.Details.
+   ------------------------------------------------------------ *@
+@using PFE_Etudiant_Asteelflash.Models.Fnc
+@using PFE_Etudiant_Asteelflash.Domain.Enums
+@model FncDetailsViewModel
+
+@{
+	ViewData["Title"] = "Détails de la FNC";
+	var userId = User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+	bool canEdit = !Model.HasQrqc && userId == Model.TransmitterId;
+	bool canManage = Model.IsRecipient;
+    bool isConducteur = Model.IsConducteur;
+    bool isCancelled = Model.Status?.Equals("annulé", System.StringComparison.OrdinalIgnoreCase) == true;
+    bool isApproved = Model.Approbation_conducteur;
+    bool traitementChoisi = Model.TraitementChoisi != null;
+}
+
+<div class="container">
+	<h1>@ViewData["Title"]</h1>
+
+	<div class="card mb-4">
+		<div class="card-header d-flex justify-content-between align-items-center">
+			<h5 class="mb-0">
+				<i class="fas fa-clipboard-list text-primary mr-2"></i>
+				FNC #@Model.Ref
+			</h5>
+			<span class="badge @GetStatusBadgeClass(Model.Status) p-2">@Model.Status</span>
+		</div>
+		<div class="card-body">
+			<!-- Section affichée dans l'ordre demandé -->
+			<div class="mb-4">
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label font-weight-bold">Référence:</label>
+					<div class="col-sm-9"><p class="form-control-plaintext">@Model.Ref</p></div>
+				</div>
+				@if (Model.ZapName?.Equals("INTEGRATION", StringComparison.OrdinalIgnoreCase) == true)
+				{
+					<div class="form-group row">
+						<label class="col-sm-3 col-form-label font-weight-bold">Client:</label>
+						<div class="col-sm-9"><p class="form-control-plaintext">@Model.Client_name</p></div>
+					</div>
+				}
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label font-weight-bold">Numéro FNC:</label>
+					<div class="col-sm-9"><p class="form-control-plaintext">@(!string.IsNullOrEmpty(Model.Num) ? Model.Num : Model.Id.ToString())</p></div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label font-weight-bold">Description:</label>
+					<div class="col-sm-9"><div class="border p-3 bg-light rounded">@Model.Description</div></div>
+				</div>
+                <div class="form-group row">
+					<label class="col-sm-3 col-form-label font-weight-bold">Énoncé de la réclamation:</label>
+					<div class="col-sm-9"><div class="border p-3 bg-light rounded">@Model.Enonce_de_la_reclamaion</div></div>
+				</div>
+                <div class="form-group row">
+					<label class="col-sm-3 col-form-label font-weight-bold">Pourquoi&nbsp;?:</label>
+					<div class="col-sm-9"><div class="border p-3 bg-light rounded">@Model.pour_quoi</div></div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label font-weight-bold">Transmis par:</label>
+					<div class="col-sm-9"><p class="form-control-plaintext">@Model.TransmitterName</p></div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label font-weight-bold">Date:</label>
+					<div class="col-sm-9"><p class="form-control-plaintext">@Model.Date.ToString("dd/MM/yyyy") @Model.Hour.ToString(@"hh\:mm")</p></div>
+				</div>
+				@if (!string.IsNullOrEmpty(Model.ProcessorName))
+				{
+					<div class="form-group row">
+						<label class="col-sm-3 col-form-label font-weight-bold">Traité par:</label>
+						<div class="col-sm-9"><p class="form-control-plaintext">@Model.ProcessorName</p></div>
+					</div>
+				}
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label font-weight-bold">Action immédiate:</label>
+					<div class="col-sm-9"><p class="form-control-plaintext">@Model.ActionImmediate</p></div>
+				</div>
+			</div>
+
+			<!-- Groupes à cases à cocher (statique) -->
+			<div class="row mb-4">
+				<div class="col-md-4">
+					<table class="table table-sm table-bordered mb-0">
+						<thead class="table-light"><tr><th>Problème Détecté par</th></tr></thead>
+						<tbody>
+							<tr><td><input type="checkbox" disabled /> Fournisseur</td></tr>
+							<tr><td><input type="checkbox" disabled /> Asteelflash Inspection</td></tr>
+							<tr><td><input type="checkbox" disabled /> Asteelflash Production</td></tr>
+							<tr><td><input type="checkbox" disabled /> Asteelflash Expedition</td></tr>
+							<tr><td><input type="checkbox" disabled /> Client</td></tr>
+							<tr><td><input type="checkbox" disabled /> Autre __________</td></tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="col-md-4">
+					<table class="table table-sm table-bordered mb-0">
+						<thead class="table-light"><tr><th>Source du Problème</th></tr></thead>
+						<tbody>
+							<tr><td><input type="checkbox" disabled /> Fournisseur</td></tr>
+							<tr><td><input type="checkbox" disabled /> Asteelflash Inspection</td></tr>
+							<tr><td><input type="checkbox" disabled /> Asteelflash Procédé Automatique</td></tr>
+							<tr><td><input type="checkbox" disabled /> Asteelflash Procédé Manuel</td></tr>
+							<tr><td><input type="checkbox" disabled /> Asteelflash Logistique</td></tr>
+							<tr><td><input type="checkbox" disabled /> Client</td></tr>
+							<tr><td><input type="checkbox" disabled /> Autre __________</td></tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="col-md-4">
+					<table class="table table-sm table-bordered mb-0">
+						<thead class="table-light">
+							<tr><th style="width:10%">Diff.</th><th style="width:45%">Nom</th><th style="width:45%">Date</th></tr>
+						</thead>
+						<tbody>
+							<tr><td><input type="checkbox" disabled /></td><td>Fournisseur</td><td></td></tr>
+							<tr><td><input type="checkbox" disabled /></td><td>Client</td><td></td></tr>
+							<tr><td><input type="checkbox" disabled /></td><td>Superviseur Prod</td><td></td></tr>
+							<tr><td><input type="checkbox" disabled /></td><td>Inspection</td><td></td></tr>
+							<tr><td><input type="checkbox" disabled /></td><td>Ingé Qualité</td><td></td></tr>
+							<tr><td><input type="checkbox" disabled /></td><td>Ingé Production</td><td></td></tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+
+
+			@* Affichage des images multiples *@
+			@{
+				var images = new[]
+				{
+			Model.ImageUrl_Piece_bonne,
+			Model.ImageUrl_Piece_Mauvaise,
+			Model.ImageUrl_3,
+			Model.ImageUrl_4,
+			Model.ImageUrl_5
+			};
+			}
+			@if (images.Any(i => !string.IsNullOrEmpty(i)))
+			{
+				<div class="row mt-3">
+					@foreach (var img in images.Where(i => !string.IsNullOrEmpty(i)))
+					{
+						var imgPath = (img.StartsWith("~") || img.StartsWith("/")) ? img : $"~/uploads/fnc/{img}";
+						<div class="col-md-6 col-sm-12 mb-3 text-center">
+							<img src="@Url.Content(imgPath)" alt="Image de la FNC"
+                                 class="img-fluid img-thumbnail @(img == Model.ImageUrl_Piece_bonne ? "border-success" : img == Model.ImageUrl_Piece_Mauvaise ? "border-danger" : "border-secondary")"
+                                 style="max-height: 500px; border:8px solid @(img == Model.ImageUrl_Piece_bonne ? "#28a745" : img == Model.ImageUrl_Piece_Mauvaise ? "#dc3545" : "#dee2e6");" />
+						</div>
+					}
+				</div>
+			}
+
+			@if (Model.HasQrqc && Model.Qrqc != null)
+			{
+				<div class="row mt-4">
+					<div class="col-12">
+						<div class="card">
+							<div class="card-header bg-info text-white">
+								<h5 class="mb-0">QRQC associé</h5>
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label class="font-weight-bold">Titre:</label>
+											<p>@Model.Qrqc.Titre</p>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label class="font-weight-bold">Date de création:</label>
+											<p>@Model.Qrqc.DateCreation.ToString("dd/MM/yyyy")</p>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-12">
+										<div class="form-group">
+											<label class="font-weight-bold">Statut:</label>
+											<p>@Model.Qrqc.Statut</p>
+										</div>
+									</div>
+								</div>
+								<div class="text-center">
+									<a href="@Url.Action("Details", "Qrqc", new { id = Model.Qrqc.Id })" class="btn btn-info">
+										<i class="fas fa-external-link-alt mr-1"></i> Voir le QRQC
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			}
+
+			<div class="row mt-4">
+				<div class="col-12">
+					<div class="d-flex justify-content-between">
+						<div>
+							<a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left mr-1"></i> Retour à la liste
+                            </a>
+						</div>
+						<div>
+							@if (canEdit && !isCancelled)
+							{
+								<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning mr-2">
+									<i class="fas fa-edit mr-1"></i> Modifier
+								</a>
+							}
+							else
+							{
+								<button class="btn btn-warning mr-2" disabled>
+									<i class="fas fa-edit mr-1"></i> Modifier
+								</button>
+							}
+							@if (!Model.HasQrqc && !isCancelled)
+							{
+								if (canManage)
+								{
+									<a href="@Url.Action("Create", "Qrqc", new { fncId = Model.Id })" class="btn btn-outline-info mr-2">
+										<i class="fas fa-plus-circle mr-1"></i> Créer un QRQC
+									</a>
+								}
+								else
+								{
+									<button class="btn btn-info mr-2" disabled>
+										<i class="fas fa-plus-circle mr-1"></i> Créer un QRQC
+									</button>
+								}
+							}
+							@* Bouton Approuver (uniquement conducteur et destinataire) *@
+                            @if (isConducteur && canManage && !isCancelled)
+                            {
+                                <form asp-action="Accept" asp-route-id="@Model.Id" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-success mr-2" onclick="return confirm('Confirmez-vous l\'approbation de cette FNC ?');">
+                                        <i class="fas fa-check-circle mr-1"></i> Approuver
+                                    </button>
+                                </form>
+                            }
+
+                           
+							@if (traitementChoisi)
+							{
+								<button class="btn btn-info mr-2" disabled>
+									<i class="fas fa-list mr-1"></i> Suivi de tri
+								</button>
+							}
+							else
+							{
+								<a asp-controller="TriFncQrqc" asp-action="Create" asp-route-fncId="@Model.Id" class="btn btn-outline-info mr-2">
+									<i class="fas fa-list mr-1"></i> Suivi de tri
+								</a>
+							}
+							@if (traitementChoisi)
+							{
+								<button class="btn btn-info mr-2" disabled>
+									<i class="fas fa-tasks mr-1"></i> Plan d'action
+								</button>
+							}
+							else
+							{
+								<a asp-controller="PlanActionFncQrqc" asp-action="Create" asp-route-fncId="@Model.Id" class="btn btn-outline-info mr-2">
+									<i class="fas fa-tasks mr-1"></i> Plan d'action
+								</a>
+							}
+							@* Bouton Rejeter *@
+							@if (canManage && !isCancelled)
+							{
+								<form asp-action="Reject" asp-route-id="@Model.Id" method="post" class="d-inline">
+									@Html.AntiForgeryToken()
+									<button type="submit" class="btn btn-danger mr-2" onclick="return confirm('Êtes-vous sûr de vouloir rejeter cette FNC ?');">
+										<i class="fas fa-times-circle mr-1"></i> Rejeter
+									</button>
+								</form>
+							}
+							else
+							{
+								<button class="btn btn-danger mr-2" disabled>
+									<i class="fas fa-times-circle mr-1"></i> Rejeter
+								</button>
+							}
+							<a href="#" class="btn btn-primary" onclick="printPage()">
+								<i class="fas fa-print mr-1"></i> Imprimer
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		        </div>
+    </div>      
+</div>
+
+@section Scripts {
+	<script>
+		function printPage() {
+			window.print();
+		}
+	</script>
+}
+
+@functions {
+	string GetStatusBadgeClass(string status)
+	{
+		switch (status)
+		{
+			case "Ouverte": return "badge-primary";
+			case "En_cours": return "badge-warning";
+			case "Clôturée": return "badge-success";
+			case "En_attente": return "badge-info";
+			default: return "badge-secondary";
+		}
+	}
+}

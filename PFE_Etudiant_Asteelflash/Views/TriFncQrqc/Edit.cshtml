@@ -1,0 +1,110 @@
+@using PFE_Etudiant_Asteelflash.Application.Tri.Dtos
+@model TriFncQrqcDto
+@{
+    ViewData["Title"] = "Modifier suivi de tri";
+}
+<h1>Modifier suivi de tri</h1>
+<style>
+    .table-black, .table-black td, .table-black th { border:1px solid #000!important; }
+</style>
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <partial name="_Form" />
+
+    <h4 class="mt-4">Lignes de tri</h4>
+    <table class="table table-bordered table-black">
+        <thead>
+            <tr>
+                <th>Zone</th>
+                <th>Qté triée</th>
+                <th>Qté NC</th>
+                <th>Matricule opérateur de TRI</th>
+                <th>Défauts détectés</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="lignes-body">
+            @if (Model.Lignes != null && Model.Lignes.Count > 0)
+            {
+                for (int i = 0; i < Model.Lignes.Count; i++)
+                {
+                    <tr>
+                        <td><input name="Lignes[@i].Zone" value="@Model.Lignes[i].Zone" class="form-control" /></td>
+                        <td><input name="Lignes[@i].QuantiteTriee" value="@Model.Lignes[i].QuantiteTriee" type="number" min="0" class="form-control" /></td>
+                        <td><input name="Lignes[@i].QuantiteNonConforme" value="@Model.Lignes[i].QuantiteNonConforme" type="number" min="0" class="form-control" /></td>
+                        <td><input name="Lignes[@i].MatriculeOperateur" value="@Model.Lignes[i].MatriculeOperateur" class="form-control" /></td>
+                        <td><input name="Lignes[@i].DefautsDetectes" value="@Model.Lignes[i].DefautsDetectes" class="form-control" /></td>
+                        <td><button type="button" class="btn btn-danger remove-ligne">Supprimer</button></td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td><input name="Lignes[0].Zone" class="form-control" /></td>
+                    <td><input name="Lignes[0].QuantiteTriee" type="number" min="0" class="form-control" /></td>
+                    <td><input name="Lignes[0].QuantiteNonConforme" type="number" min="0" class="form-control" /></td>
+                    <td><input name="Lignes[0].MatriculeOperateur" class="form-control" /></td>
+                    <td><input name="Lignes[0].DefautsDetectes" class="form-control" /></td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button type="button" id="add-ligne" class="btn btn-sm btn-primary mb-3">+ Ajouter une ligne</button>
+
+    <div class="mb-3">
+        <strong>Total trié:</strong> <span id="total-trie">0</span> &nbsp;&nbsp;
+        <strong>Total non conforme:</strong> <span id="total-nc">0</span> &nbsp;&nbsp;
+        <strong>% de défaut:</strong> <span id="pourc-defaut">0 %</span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+
+    @section Scripts {
+        <script type="text/template" id="ligne-template">
+            <tr>
+                <td><input name="Lignes[__index__].Zone" class="form-control" /></td>
+                <td><input name="Lignes[__index__].QuantiteTriee" type="number" min="0" class="form-control" /></td>
+                <td><input name="Lignes[__index__].QuantiteNonConforme" type="number" min="0" class="form-control" /></td>
+                <td><input name="Lignes[__index__].MatriculeOperateur" class="form-control" /></td>
+                <td><input name="Lignes[__index__].DefautsDetectes" class="form-control" /></td>
+                <td><button type="button" class="btn btn-danger remove-ligne">Supprimer</button></td>
+            </tr>
+        </script>
+        <script>
+            function calcTotals(){
+                let totalTrie=0, totalNc=0;
+                document.querySelectorAll('[name^="Lignes"][name$=".QuantiteTriee"]').forEach(el=> totalTrie += parseInt(el.value)||0);
+                document.querySelectorAll('[name^="Lignes"][name$=".QuantiteNonConforme"]').forEach(el=> totalNc += parseInt(el.value)||0);
+                document.getElementById('total-trie').textContent = totalTrie;
+                document.getElementById('total-nc').textContent = totalNc;
+                const pourc = totalTrie>0 ? (totalNc/totalTrie*100).toFixed(1) : 0;
+                document.getElementById('pourc-defaut').textContent = pourc + ' %';
+            }
+            document.addEventListener('DOMContentLoaded', function(){
+                var indexLigne = @Model.Lignes?.Count ?? 1;
+                calcTotals();
+                document.getElementById('add-ligne').addEventListener('click', function(e){
+                    e.preventDefault();
+                    var template = document.getElementById('ligne-template').innerHTML;
+                    var html = template.replace(/__index__/g, indexLigne);
+                    document.querySelector('#lignes-body').insertAdjacentHTML('beforeend', html);
+                    indexLigne++;
+                    calcTotals();
+                });
+                // input change
+                document.addEventListener('input', function(e){
+                    if(e.target && (e.target.name && (e.target.name.endsWith('.QuantiteTriee') || e.target.name.endsWith('.QuantiteNonConforme')))) calcTotals();
+                });
+                // remove
+                document.addEventListener('click', function(e){
+                    if(e.target && e.target.classList.contains('remove-ligne')){
+                        e.preventDefault(); e.target.closest('tr').remove(); calcTotals();
+                    }
+                });
+            });
+        </script>
+    }
+</form>

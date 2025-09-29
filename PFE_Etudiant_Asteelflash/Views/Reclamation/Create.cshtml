@@ -1,0 +1,21 @@
+@model PFE_Etudiant_Asteelflash.Application.Réclamation.Dtos.CreateReclamationDto
+@{
+    ViewData["Title"] = "Créer une réclamation";
+}
+
+<h2 class="mb-4"><i class="fas fa-exclamation-circle text-danger"></i> Nouvelle réclamation</h2>
+
+<form asp-action="Create" asp-controller="Reclamation" method="post">
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <label asp-for="Description" class="control-label">Rédiger la réclamation</label>
+        <textarea asp-for="Description" class="form-control" rows="6" placeholder="Décrivez votre réclamation..."></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-danger mt-3"><i class="fas fa-paper-plane mr-1"></i> Envoyer</button>
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

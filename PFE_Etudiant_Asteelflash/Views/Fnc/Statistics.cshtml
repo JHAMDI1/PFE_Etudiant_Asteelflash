@@ -1,0 +1,349 @@
+@* ------------------------------------------------------------
+   Vue Statistics.cshtml
+   Dashboard affichant des graphiques et KPI sur les FNC (par statut,
+   zap, mois). Bindé sur FncStatisticsDto retourné par FncController.Statistics.
+   ------------------------------------------------------------ *@
+@model PFE_Etudiant_Asteelflash.Application.Fnc.Dtos.FncStatisticsDto
+
+@{
+    ViewData["Title"] = "Statistiques des FNCs";
+}
+
+<div class="container">
+    <h1>@ViewData["Title"]</h1>
+
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">Total des FNCs</h6>
+                            <h2 class="display-4">@Model.TotalFncs</h2>
+                        </div>
+                        <i class="fas fa-clipboard-list fa-3x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">FNCs ce mois</h6>
+                            <h2 class="display-4">@Model.FncsThisMonth</h2>
+                        </div>
+                        <i class="fas fa-calendar-alt fa-3x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">FNCs mois dernier</h6>
+                            <h2 class="display-4">@Model.FncsLastMonth</h2>
+                        </div>
+                        <i class="fas fa-calendar-minus fa-3x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card @(Model.MonthlyChangePercentage >= 0 ? "text-white bg-success" : "text-white bg-danger")">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">Évolution mensuelle</h6>
+                            <h2 class="display-4">@(Model.MonthlyChangePercentage >= 0 ? "+" : "")@Model.MonthlyChangePercentage.ToString("0.0")%</h2>
+                        </div>
+                        <i class="fas @(Model.MonthlyChangePercentage >= 0 ? "fa-arrow-up" : "fa-arrow-down") fa-3x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-pie mr-2"></i>Répartition par statut</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="statusChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-bar mr-2"></i>Répartition par type de FNC</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="typeFncChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-line mr-2"></i>Évolution mensuelle des FNCs</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="monthlyChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-building mr-2"></i>Top 5 clients</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="clientChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-industry mr-2"></i>Répartition par ZAP</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="zapChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-users mr-2"></i>Top transmetteurs</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th class="text-center">Nombre de FNCs</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var transmitter in Model.TopTransmitters)
+                            {
+                                <tr>
+                                    <td>@transmitter.UserName</td>
+                                    <td class="text-center">@transmitter.Count</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-user-tie mr-2"></i>Top processeurs</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th class="text-center">Nombre de FNCs</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var processor in Model.TopProcessors)
+                            {
+                                <tr>
+                                    <td>@processor.UserName</td>
+                                    <td class="text-center">@processor.Count</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left mr-1"></i> Retour à la liste
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        $(document).ready(function () {
+            // Préparation des données pour les graphiques
+            var statusLabels = @Html.Raw(Json.Serialize(Model.CountByStatus.Keys));
+            var statusData = @Html.Raw(Json.Serialize(Model.CountByStatus.Values));
+            var statusColors = ['#007bff', '#ffc107', '#28a745', '#17a2b8', '#6c757d'];
+            
+            var typeFncLabels = @Html.Raw(Json.Serialize(Model.CountByTypeFnc.Keys));
+            var typeFncData = @Html.Raw(Json.Serialize(Model.CountByTypeFnc.Values));
+            var typeFncColors = ['#007bff', '#28a745', '#dc3545', '#6610f2', '#fd7e14'];
+            
+            var monthLabels = @Html.Raw(Json.Serialize(Model.CountByMonth.Keys));
+            var monthData = @Html.Raw(Json.Serialize(Model.CountByMonth.Values));
+            
+            var clientLabels = @Html.Raw(Json.Serialize(Model.CountByClientName.Keys));
+            var clientData = @Html.Raw(Json.Serialize(Model.CountByClientName.Values));
+            var clientColors = ['#007bff', '#28a745', '#dc3545', '#6610f2', '#fd7e14'];
+            
+            var zapLabels = @Html.Raw(Json.Serialize(Model.CountByZap.Keys));
+            var zapData = @Html.Raw(Json.Serialize(Model.CountByZap.Values));
+            var zapColors = ['#007bff', '#28a745', '#dc3545', '#6610f2', '#fd7e14'];
+
+            // Graphique de répartition par statut
+            var statusCtx = document.getElementById('statusChart').getContext('2d');
+            var statusChart = new Chart(statusCtx, {
+                type: 'pie',
+                data: {
+                    labels: statusLabels,
+                    datasets: [{
+                        data: statusData,
+                        backgroundColor: statusColors,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Graphique de répartition par type de FNC
+            var typeFncCtx = document.getElementById('typeFncChart').getContext('2d');
+            var typeFncChart = new Chart(typeFncCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: typeFncLabels,
+                    datasets: [{
+                        data: typeFncData,
+                        backgroundColor: typeFncColors,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Graphique d'évolution mensuelle
+            var monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+            var monthlyChart = new Chart(monthlyCtx, {
+                type: 'line',
+                data: {
+                    labels: monthLabels,
+                    datasets: [{
+                        label: 'Nombre de FNCs',
+                        data: monthData,
+                        borderColor: '#007bff',
+                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        tension: 0.1,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Graphique des clients
+            var clientCtx = document.getElementById('clientChart').getContext('2d');
+            var clientChart = new Chart(clientCtx, {
+                type: 'bar',
+                data: {
+                    labels: clientLabels,
+                    datasets: [{
+                        label: 'Nombre de FNCs',
+                        data: clientData,
+                        backgroundColor: clientColors
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Graphique des ZAPs
+            var zapCtx = document.getElementById('zapChart').getContext('2d');
+            var zapChart = new Chart(zapCtx, {
+                type: 'pie',
+                data: {
+                    labels: zapLabels,
+                    datasets: [{
+                        data: zapData,
+                        backgroundColor: zapColors,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- Simplified AsteelFlash logo for favicon -->
+  <!-- Top-left red triangle -->
+  <polygon points="11,4 5,14 17,14" fill="#c02126" />
+  
+  <!-- Bottom red triangle -->
+  <polygon points="17,14 11,24 23,24" fill="#c02126" />
+  
+  <!-- Top-right blue triangle -->
+  <polygon points="23,4 17,14 29,14" fill="#2058a5" />
+  
+  <!-- Small blue triangle (top) -->
+  <polygon points="23,4 29,4 26,9" fill="#2058a5" />
+</svg>

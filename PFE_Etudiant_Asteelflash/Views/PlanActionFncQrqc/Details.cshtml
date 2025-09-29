@@ -1,0 +1,86 @@
+@using System.Linq
+@using PFE_Etudiant_Asteelflash.Application.PlanAction.Dtos
+@model PlanActionFncQrqcDto
+@{
+    ViewData["Title"] = "Détails Plan d'action";
+}
+<h1 class="mb-4">Plan d'action - Détails</h1>
+<style>
+    /* Largeur mini pour meilleure lisibilité des champs texte */
+    .plan-table th, .plan-table td {
+        min-width: 200px; /* ≈ 20+ caractères */
+        white-space: pre-wrap;
+    }
+</style>
+
+<!-- Infos synthétiques -->
+<table class="table table-sm w-auto mb-4">
+  <tr><th>Id</th><td>@Model.Id</td></tr>
+  <tr><th>Date création</th><td>@Model.DateCreationDoc.ToString("dd/MM/yyyy")</td></tr>
+  <tr><th>Nombre actions</th><td>@Model.NombreActions</td></tr>
+  <tr><th>Taux clôture</th><td>@Model.TauxClotureActions?.ToString("P0")</td></tr>
+  <tr><th>Taux délais</th><td>@Model.TauxRespectDelais?.ToString("P0")</td></tr>
+  <tr><th>Taux efficacité</th><td>@Model.TauxEfficacite?.ToString("P0")</td></tr>
+</table>
+@{
+    var lignes = ViewBag.Lignes as IEnumerable<PlanActionFncQrqcLigneDto> ?? Enumerable.Empty<PlanActionFncQrqcLigneDto>();
+}
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-sm plan-table">
+        <thead class="thead-light text-center align-middle">
+            <tr>
+                <th>N°</th>
+                <th>Date création</th>
+                <th>Origine</th>
+                <th>Sujet</th>
+                <th>Processus</th>
+                <th>Description problème / Anomalie</th>
+                <th>Cause racine</th>
+                <th>Q/D</th>
+                <th>NC</th>
+                <th>Action</th>
+                <th>Responsable</th>
+                <th>Date prévue</th>
+                <th>Date réalisée</th>
+                <th>Date mesure efficacité</th>
+                <th>Resp mesure efficacité</th>
+                <th>Efficacité OK</th>
+                <th>Avancement</th>
+                <th>Retard (j)</th>
+                <th>Commentaire</th>
+                <th>Point critique</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var l in lignes)
+        {
+            <tr>
+                <td>@l.Numero</td>
+                <td>@l.DateCreation.ToString("dd/MM/yyyy")</td>
+                <td>@l.Origine</td>
+                <td>@l.Sujet</td>
+                <td>@l.Processus</td>
+                <td>@l.DescriptionProbleme</td>
+                <td>@l.CauseRacine</td>
+                <td>@l.TypeAction</td>
+                <td class="text-center">@(l.NC ? "✓" : "")</td>
+                <td>@l.Action</td>
+                <td>@l.Responsable</td>
+                <td>@l.DatePrevue?.ToString("dd/MM/yyyy")</td>
+                <td>@l.DateRealise?.ToString("dd/MM/yyyy")</td>
+                <td>@l.DateMesureEfficacite?.ToString("dd/MM/yyyy")</td>
+                <td>@l.RespMesureEfficacite</td>
+                <td>@(l.EfficaciteOK.HasValue ? (l.EfficaciteOK.Value ? "Oui" : "Non") : "")</td>
+                <td>@l.Avancement</td>
+                <td>@l.Retard</td>
+                <td>@l.Commentaire</td>
+                <td>@l.PointCritique</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning mr-2">Éditer</a>
+<a asp-action="Index" class="btn btn-secondary">Retour</a>

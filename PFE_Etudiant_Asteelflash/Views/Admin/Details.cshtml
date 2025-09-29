@@ -1,0 +1,33 @@
+@using PFE_Etudiant_Asteelflash.Domain.Entities
+@model ApplicationUser
+
+@{
+    ViewData["Title"] = "Détails de l'utilisateur";
+}
+
+<h2 class="mb-3">Détails de l'utilisateur</h2>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Prénom</dt>
+            <dd class="col-sm-9">@Model.FirstName</dd>
+
+            <dt class="col-sm-3">Nom</dt>
+            <dd class="col-sm-9">@Model.LastName</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">Matricule</dt>
+            <dd class="col-sm-9">@Model.Matricule</dd>
+
+            <dt class="col-sm-3">Fonction</dt>
+            <dd class="col-sm-9">@Model.Fonction</dd>
+
+            <dt class="col-sm-3">Statut</dt>
+            <dd class="col-sm-9">@(Model.IsActive ? "Actif" : "Inactif")</dd>
+        </dl>
+        <a asp-action="Index" class="btn btn-secondary">Retour à la liste</a>
+    </div>
+</div>

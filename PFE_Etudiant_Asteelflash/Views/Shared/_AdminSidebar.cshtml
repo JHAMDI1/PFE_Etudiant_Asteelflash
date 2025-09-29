@@ -1,0 +1,94 @@
+@*
+   Sidebar latéral de PurpleAdmin
+   Contient: Profil utilisateur et menu principal
+*@
+@using Microsoft.AspNetCore.Identity
+@using PFE_Etudiant_Asteelflash.Domain.Entities
+@inject UserManager<ApplicationUser> _userManager
+@{
+	var currentUser = await _userManager.GetUserAsync(User);
+}
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+	<ul class="nav">
+		<li class="nav-item nav-profile">
+			<a href="#" class="nav-link">
+				<div class="nav-profile-image">
+					<img src="@((currentUser != null && !string.IsNullOrEmpty(currentUser.ProfileImagePath)) ? currentUser.ProfileImagePath : Url.Content("~/admin/images/faces/face1.jpg"))" alt="profile">
+					<span class="login-status online"></span>
+				</div>
+				<div class="nav-profile-text d-flex flex-column">
+					<span class="font-weight-bold mb-2">@((currentUser != null) ? $"{currentUser.FirstName} {currentUser.LastName}" : "Utilisateur")</span>
+					<span class="text-secondary text-small">@((currentUser != null) ? currentUser.Fonction.ToString() : "")</span>
+				</div>
+				<i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" asp-controller="Home" asp-action="Index">
+				<span class="menu-title">Tableau de bord</span>
+				<i class="mdi mdi-home menu-icon"></i>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+				<span class="menu-title">Gestion des FNC</span>
+				<i class="menu-arrow"></i>
+				<i class="mdi mdi-crosshairs-gps menu-icon"></i>
+			</a>
+			<div class="collapse" id="ui-basic">
+				<ul class="nav flex-column sub-menu">
+					<li class="nav-item"> <a class="nav-link" asp-controller="Fnc" asp-action="Index">Fiches non-conformité</a></li>
+				</ul>
+			</div>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-bs-toggle="collapse" href="#qrqc-menu" aria-expanded="false" aria-controls="qrqc-menu">
+				<span class="menu-title">Gestion des QRQC</span>
+				<i class="menu-arrow"></i>
+				<i class="mdi mdi-view-list menu-icon"></i>
+			</a>
+			<div class="collapse" id="qrqc-menu">
+				<ul class="nav flex-column sub-menu">
+					<li class="nav-item"><a class="nav-link" asp-controller="Qrqc" asp-action="Index">Liste des QRQC</a></li>
+				</ul>
+			</div>
+		</li>
+		<!-- Gestion de suivi de tri -->
+		<li class="nav-item">
+			<a class="nav-link" asp-controller="TriFncQrqc" asp-action="Index">
+				<span class="menu-title">Gestion de suivi de tri</span>
+				<i class="mdi mdi-format-list-bulleted menu-icon"></i>
+			</a>
+		</li>
+		<!-- Gestion des plans d'action -->
+		<li class="nav-item">
+			<a class="nav-link" asp-controller="PlanActionFncQrqc" asp-action="Index">
+				<span class="menu-title">Gestion des plans d'action</span>
+				<i class="mdi mdi-calendar-check menu-icon"></i>
+			</a>
+		</li>
+		<li class="nav-item sidebar-actions">
+			<span class="nav-link">
+				<div class="border-bottom">
+					<h6 class="font-weight-normal mb-3">Actions</h6>
+				</div>
+				<a class="btn btn-block btn-lg btn-danger mt-4" asp-controller="Reclamation" asp-action="Create">
+					<i class="fas fa-exclamation-circle"></i> Réclamation
+				</a>
+				<br/>
+				@if (User.IsInRole("Admin"))
+				{
+					<a class="btn btn-block btn-lg btn-primary mt-2" asp-controller="Admin" asp-action="Index">
+						<i class="mdi mdi-account-multiple"></i> Espace Admin
+					</a>
+				}
+				else
+				{
+					<a class="btn btn-block btn-lg btn-secondary mt-2 disabled text-muted" style="pointer-events:none;" href="#">
+						<i class="mdi mdi-account-multiple-outline"></i> Espace Admin
+					</a>
+				}
+			</span>
+		</li>
+	</ul>
+</nav>

@@ -1,0 +1,80 @@
+@using PFE_Etudiant_Asteelflash.Application.Tri.Dtos
+@model TriFncQrqcDto
+@{
+    ViewData["Title"] = "Fiche de suivi de tri";
+}
+
+<h2 class="text-center mb-4">FICHE DE SUIVI DE TRI</h2>
+<style>
+    /* Spécifique à la fiche de suivi de tri */
+    .tri-card {
+        background:#fff;
+        padding:2rem 3rem;
+        border:1px solid #dee2e6;
+        border-radius:6px;
+        box-shadow:0 2px 6px rgba(0,0,0,.05);
+    }
+    .tri-card p { margin-bottom:.3rem; }
+    .tri-table thead th{background:#f2f2f2;font-weight:600;}
+    .tri-table, .tri-table th, .tri-table td{border:1px solid #000!important;}
+    .tri-table tfoot td{background:#ffe97a!important;color:#000;font-weight:600;}
+</style>
+
+<div class="tri-card mb-4">
+    <div class="row g-1 mb-3">
+        <div class="col-sm-4 fw-bold">Date :</div><div class="col-sm-8">@Model.DateTri.ToString("dd/MM/yyyy")</div>
+        <div class="col-sm-4 fw-bold">Pilote :</div><div class="col-sm-8">@Model.PiloteName</div>
+        <div class="col-sm-4 fw-bold">Client :</div><div class="col-sm-8">@Model.Client</div>
+        <div class="col-sm-4 fw-bold">REF du Produit :</div><div class="col-sm-8">@Model.ReferenceProduit</div>
+        <div class="col-sm-4 fw-bold">Objet du TRI :</div><div class="col-sm-8">@Model.ObjetTri</div>
+        <div class="col-sm-4 fw-bold">N° de l'alerte :</div><div class="col-sm-8">@Model.NumeroAlerte</div>
+    </div>
+</div>
+
+    <div class="table-responsive">
+            <table class="table table-bordered tri-table align-middle text-center">
+        <thead class="text-nowrap text-center">
+            <tr>
+                <th>ZONE</th>
+                <th>Quantité Trié</th>
+                <th>Quantité non conforme</th>
+                <th>Matricule opérateur de TRI</th>
+                <th>Défauts détectés</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var l in Model.Lignes)
+            {
+                <tr>
+                    <td>@l.Zone</td>
+                    <td class="text-end">@l.QuantiteTriee</td>
+                    <td class="text-end">@l.QuantiteNonConforme</td>
+                    <td>@l.MatriculeOperateur</td>
+                    <td>@l.DefautsDetectes</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr class="bg-warning fw-bold">
+                <td colspan="2">Total trié:</td>
+                <td class="text-end">@Model.TotalTrie</td>
+                <td colspan="2"></td>
+            </tr>
+            <tr class="bg-warning fw-bold">
+                <td colspan="2">Total non conforme:</td>
+                <td class="text-end">@Model.TotalNonConforme</td>
+                <td colspan="2"></td>
+            </tr>
+            <tr class="bg-warning fw-bold">
+                <td colspan="2">% de défaut:</td>
+                <td class="text-end">@Model.PourcentageDefaut.ToString("P1")</td>
+                <td colspan="2"></td>
+            </tr>
+        </tfoot>
+    </table>
+    </div>
+</div>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">Éditer</a>
+<a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger me-2">Supprimer</a>
+<a asp-action="Index" class="btn btn-secondary">Retour</a>

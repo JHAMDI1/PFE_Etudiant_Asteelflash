@@ -1,0 +1,308 @@
+@* ------------------------------------------------------------
+   Vue Register.cshtml
+   Formulaire d'inscription : bind sur RegisterViewModel et POST
+   vers AuthController.Register. Utilise validation MVC côté serveur
+   et Bootstrap pour le style.
+   ------------------------------------------------------------ *@
+@using PFE_Etudiant_Asteelflash.Domain.Enums
+@model PFE_Etudiant_Asteelflash.Models.Auth.RegisterViewModel
+@{
+    ViewData["Title"] = "Inscription";
+    Layout = "~/Views/Shared/_LayoutAuth.cshtml";
+}
+<div class="container" style="max-width: 800px; margin: 0 auto;">
+<h4 class="text-center mb-5" style="font-size: 1.8rem; font-weight: 600; color: #6f42c1;">Créer un compte</h4>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+<form asp-action="Register" method="post" enctype="multipart/form-data" class="forms-sample">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="FirstName">Prénom</label>
+                <div class="input-group">
+                    <div class="input-group-prepend bg-transparent">
+                        <span class="input-group-text bg-transparent border-right-0">
+                            <i class="mdi mdi-account-outline text-primary"></i>
+                        </span>
+                    </div>
+                    <input asp-for="FirstName" class="form-control form-control-lg border-left-0" placeholder="Prénom">
+                </div>
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="LastName">Nom</label>
+                <div class="input-group">
+                    <div class="input-group-prepend bg-transparent">
+                        <span class="input-group-text bg-transparent border-right-0">
+                            <i class="mdi mdi-account-outline text-primary"></i>
+                        </span>
+                    </div>
+                    <input asp-for="LastName" class="form-control form-control-lg border-left-0" placeholder="Nom">
+                </div>
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email">Email</label>
+        <div class="input-group">
+            <div class="input-group-prepend bg-transparent">
+                <span class="input-group-text bg-transparent border-right-0">
+                    <i class="mdi mdi-email-outline text-primary"></i>
+                </span>
+            </div>
+            <input asp-for="Email" class="form-control form-control-lg border-left-0" placeholder="Email">
+        </div>
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PhoneNumber">Numéro de téléphone</label>
+        <div class="input-group">
+            <div class="input-group-prepend bg-transparent">
+                <span class="input-group-text bg-transparent border-right-0">
+                    <i class="mdi mdi-phone text-primary"></i>
+                </span>
+            </div>
+            <input asp-for="PhoneNumber" class="form-control form-control-lg border-left-0" placeholder="Téléphone">
+        </div>
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+
+    <!-- Image de profil -->
+    <div class="form-group">
+        <label asp-for="ProfileImage">Image de profil</label>
+        <input type="file" asp-for="ProfileImage" class="form-control-file" accept="image/*" />
+        <span asp-validation-for="ProfileImage" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Matricule">Matricule</label>
+        <div class="input-group">
+            <div class="input-group-prepend bg-transparent">
+                <span class="input-group-text bg-transparent border-right-0">
+                    <i class="mdi mdi-card-bulleted-outline text-primary"></i>
+                </span>
+            </div>
+            <input asp-for="Matricule" class="form-control form-control-lg border-left-0" placeholder="Matricule">
+        </div>
+        <span asp-validation-for="Matricule" class="text-danger"></span>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Gender">Genre</label>
+                <div class="input-group">
+                    <div class="input-group-prepend bg-transparent">
+                        <span class="input-group-text bg-transparent border-right-0">
+                            <i class="mdi mdi-gender-male-female text-primary"></i>
+                        </span>
+                    </div>
+                    <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()" class="form-control form-control-lg border-left-0"></select>
+                </div>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Fonction">Fonction</label>
+                <div class="input-group">
+                    <div class="input-group-prepend bg-transparent">
+                        <span class="input-group-text bg-transparent border-right-0">
+                            <i class="mdi mdi-briefcase text-primary"></i>
+                        </span>
+                    </div>
+                    <select asp-for="Fonction" asp-items="Html.GetEnumSelectList<Fonction>()" class="form-control form-control-lg border-left-0"></select>
+                </div>
+                <span asp-validation-for="Fonction" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div id="zap-container" class="form-group">
+        <label>ZAP(s)</label>
+        <div class="input-group mb-2 zap-select-wrapper">
+            <div class="input-group-prepend bg-transparent">
+                <span class="input-group-text bg-transparent border-right-0">
+                    <i class="mdi mdi-office-building text-primary"></i>
+                </span>
+            </div>
+            <select name="ZapIds" class="form-control form-control-lg border-left-0 zap-select">
+                <option value="">-- Sélectionnez une ZAP --</option>
+                @if (Model.ZapList != null)
+                {
+                    @foreach (var item in Model.ZapList)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                }
+            </select>
+        </div>
+        <button type="button" id="add-zap-btn" class="btn btn-sm btn-outline-primary">+ Ajouter une ZAP</button>
+        <span asp-validation-for="ZapIds" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Password">Mot de passe</label>
+        <div class="input-group">
+            <div class="input-group-prepend bg-transparent">
+                <span class="input-group-text bg-transparent border-right-0">
+                    <i class="mdi mdi-lock-outline text-primary"></i>
+                </span>
+            </div>
+            <input asp-for="Password" type="password" class="form-control form-control-lg border-left-0" placeholder="Mot de passe">
+        </div>
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ConfirmPassword">Confirmer le mot de passe</label>
+        <div class="input-group">
+            <div class="input-group-prepend bg-transparent">
+                <span class="input-group-text bg-transparent border-right-0">
+                    <i class="mdi mdi-lock-outline text-primary"></i>
+                </span>
+            </div>
+            <input asp-for="ConfirmPassword" type="password" class="form-control form-control-lg border-left-0" placeholder="Confirmer le mot de passe">
+        </div>
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    </div>
+
+    <div class="mt-4 text-center">
+        <button type="submit" class="btn btn-gradient-primary btn-lg font-weight-medium auth-form-btn" style="width: 200px; padding: 12px 20px;">S'INSCRIRE</button>
+    </div>
+    <div class="text-center mt-4 font-weight-light">
+        Vous avez déjà un compte? <a asp-action="Login" class="text-primary">Se connecter</a>
+    </div>
+</form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        $(document).ready(function() {
+            // Appliquer des styles personnalisés aux champs de sélection lorsqu'une option est choisie
+            $("select").change(function() {
+                if ($(this).val() !== "") {
+                    $(this).addClass("filled-select");
+                    $(this).closest(".input-group").addClass("active-input");
+                    
+                    // Si c'est un des champs spécifiques (Genre, Fonction, ZAP), mettre en gras l'option sélectionnée
+                    if ($(this).attr("id") === "Gender" || $(this).attr("id") === "Fonction" || $(this).hasClass("zap-select")) {
+                        $(this).addClass("bold-selected");
+                    }
+                } else {
+                    $(this).removeClass("filled-select bold-selected");
+                    $(this).closest(".input-group").removeClass("active-input");
+                }
+                            });
+
+            // Bouton ajout d'une ZAP
+            $("#add-zap-btn").click(function () {
+                var clone = $(".zap-select-wrapper:first").clone();
+                clone.find("select").val("");
+                $("#zap-container").append(clone);
+            });
+
+            // Vérifier l'état initial des sélecteurs au chargement de la page
+            $("select").each(function() {
+                if ($(this).val() !== "") {
+                    $(this).addClass("filled-select");
+                    $(this).closest(".input-group").addClass("active-input");
+                    
+                    // Si c'est un des champs spécifiques (Genre, Fonction, ZAP), mettre en gras l'option sélectionnée
+                    if ($(this).attr("id") === "Gender" || $(this).attr("id") === "Fonction" || $(this).hasClass("zap-select")) {
+                        $(this).addClass("bold-selected");
+                    }
+                }
+            });
+            
+            // Appliquer également aux champs de texte
+            $("input[type='text'], input[type='email'], input[type='password'], input[type='tel']").on('input', function() {
+                if ($(this).val() !== "") {
+                    $(this).addClass("filled-input");
+                    $(this).closest(".input-group").addClass("active-input");
+                } else {
+                    $(this).removeClass("filled-input");
+                    $(this).closest(".input-group").removeClass("active-input");
+                }
+            });
+            
+            // Vérifier l'état initial des champs de texte au chargement
+            $("input[type='text'], input[type='email'], input[type='password'], input[type='tel']").each(function() {
+                if ($(this).val() !== "") {
+                    $(this).addClass("filled-input");
+                    $(this).closest(".input-group").addClass("active-input");
+                }
+            });
+        });
+    </script>
+    
+    <style>
+        /* Style pour tous les inputs */
+        .form-control {
+            transition: all 0.3s ease;
+        }
+        
+        /* Style pour les champs remplis */
+        .filled-select,
+        .filled-input,
+        .form-control:not(:placeholder-shown) {
+            background-color: #e8eaf6 !important; /* Couleur bleu très pâle */
+        }
+        
+        /* Appliquer la même couleur aux champs dès le chargement */
+        input.form-control[value]:not([value=""]),
+        select.form-control:not([value=""]) {
+            background-color: #e8eaf6 !important;
+        }
+        
+        .active-input {
+            border-color: #6f42c1 !important;
+        }
+        
+        /* Style pour les selects après sélection */
+        select.filled-select {
+            color: #495057 !important;
+            font-weight: 500 !important;
+        }
+        
+        /* Style spécifique pour les selects Gender, Fonction et ZAP qui doivent avoir le texte en gras */
+        select.bold-selected {
+            font-weight: 700 !important;
+            color: #333 !important;
+        }
+        
+        /* Style pour les options dans les listes déroulantes */
+        select#Gender option:checked,
+        select#Fonction option:checked,
+        select.zap-select option:checked {
+            font-weight: 700;
+            background-color: #e8eaf6;
+        }
+        
+        .input-group:hover {
+            border-color: #6f42c1 !important;
+        }
+        
+        /* S'assurer que les inputs avec valeur ont le fond coloré */
+        .form-control-lg {
+            background-color: #fff;
+        }
+        
+        .form-control-lg:not(:placeholder-shown) {
+            background-color: #e8eaf6 !important;
+        }
+    </style>
+}

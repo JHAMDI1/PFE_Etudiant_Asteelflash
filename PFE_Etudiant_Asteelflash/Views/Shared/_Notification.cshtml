@@ -1,0 +1,86 @@
+@* ------------------------------------------------------------
+   Vue partielle _Notification.cshtml
+   Affiche les toasts toastr en fonction des TempData (success, error…).
+   Peut être incluse dans n'importe quel layout ou page.
+   ------------------------------------------------------------ *@
+<!-- Inclure les ressources toastr une seule fois -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+<!-- Inclure jQuery avant toastr pour garantir le bon fonctionnement -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+@if (TempData["success"] != null || TempData["error"] != null || TempData["info"] != null || TempData["warning"] != null)
+{
+    <script type="text/javascript">
+        // Configuration de toastr
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+
+        @if (TempData["success"] != null)
+        {
+            <text>toastr.success('@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(TempData["success"].ToString()))');</text>
+        }
+
+        @if (TempData["error"] != null)
+        {
+            <text>toastr.error('@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(TempData["error"].ToString()))');</text>
+        }
+
+        @if (TempData["info"] != null)
+        {
+            <text>toastr.info('@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(TempData["info"].ToString()))');</text>
+        }
+
+        @if (TempData["warning"] != null)
+        {
+            <text>toastr.warning('@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(TempData["warning"].ToString()))');</text>
+        }
+    </script>
+}
+
+@if (TempData["Success"] != null)
+{
+    <script>
+        $(document).ready(function () {
+            toastr.success('@TempData["Success"]');
+        });
+    </script>
+}
+@if (TempData["Error"] != null)
+{
+    <script>
+        $(document).ready(function () {
+            toastr.error('@TempData["Error"]');
+        });
+    </script>
+}
+@if (TempData["Warning"] != null)
+{
+    <script>
+        $(document).ready(function () {
+            toastr.warning('@TempData["Warning"]');
+        });
+    </script>
+}
+@if (TempData["Info"] != null)
+{
+    <script>
+        $(document).ready(function () {
+            toastr.info('@TempData["Info"]');
+        });
+    </script>
+}

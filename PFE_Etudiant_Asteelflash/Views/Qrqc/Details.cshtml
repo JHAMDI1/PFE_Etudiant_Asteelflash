@@ -1,0 +1,590 @@
+@model PFE_Etudiant_Asteelflash.Application.Qrqc.Dtos.GlobalQrqcDto
+@using System.Security.Claims
+
+@{
+    ViewData["Title"] = "QRQC Details";
+}
+
+<div class="container qrqc-create">
+    <h2 class="mb-4">QRQC Details</h2>
+    
+    <!-- Basic Information -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">Basic Information</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID:</dt>
+                <dd class="col-sm-9">@Model.Id</dd>
+                
+                <dt class="col-sm-3">Processor:</dt>
+                <dd class="col-sm-9">@Model.ProcessorFullName</dd>
+                
+                <dt class="col-sm-3">Creation Date:</dt>
+                <dd class="col-sm-9">@Model.CreationDate.ToString("d")</dd>
+
+                <dt class="col-sm-3">FNC ID:</dt>
+                <dd class="col-sm-9">@Model.FNCId</dd>
+
+                <dt class="col-sm-3">Alerte Qualité:</dt>
+                <dd class="col-sm-9">@(Model.AlerteQualite ? "Oui" : "Non")</dd>
+            </dl>
+        </div>
+    </div>
+    
+    <!-- FNC Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">FNC</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Client Name:</dt>
+                <dd class="col-sm-9">@Model.Client_name</dd>
+                
+                <dt class="col-sm-3">Part Number:</dt>
+                <dd class="col-sm-9">@Model.Part_number</dd>
+                
+                <dt class="col-sm-3">Nature du défaut:</dt>
+                <dd class="col-sm-9">@Model.NatureDefaut</dd>
+            </dl>
+        </div>
+    </div>
+    
+    <!-- D1: Définition du problème -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">D1: Définition du problème</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Problème:</dt>
+                <dd class="col-sm-9">@Model.Probleme</dd>
+                
+                <dt class="col-sm-3">Lieu de détection:</dt>
+                <dd class="col-sm-9">@Model.LieuDeDetection</dd>
+                
+                <dt class="col-sm-3">Détecteur:</dt>
+                <dd class="col-sm-9">@Model.Detecteur</dd>
+
+                <dt class="col-sm-3">Date:</dt>
+                <dd class="col-sm-9">@Model.Date.ToString("d")</dd>
+
+                <dt class="col-sm-3">Heure:</dt>
+                <dd class="col-sm-9">@Model.Heure</dd>
+
+                <dt class="col-sm-3">Manière de détection:</dt>
+                <dd class="col-sm-9">@Model.ManiereDeDetection</dd>
+
+                <dt class="col-sm-3">Nb pièces concernées:</dt>
+                <dd class="col-sm-9">@Model.NbreDePiecesConcernes</dd>
+            </dl>
+        </div>
+    </div>
+    
+    <!-- D2: Description du problème -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">D2: Description du problème</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Problème:</dt>
+                <dd class="col-sm-9">@Model.Probleme</dd>
+
+                <dt class="col-sm-3">Détecteur:</dt>
+                <dd class="col-sm-9">@Model.Detecteur</dd>
+
+                <dt class="col-sm-3">Lieu de détection:</dt>
+                <dd class="col-sm-9">@Model.LieuDeDetection</dd>
+
+                <dt class="col-sm-3">Date:</dt>
+                <dd class="col-sm-9">@Model.Date.ToString("d")</dd>
+
+                <dt class="col-sm-3">Heure:</dt>
+                <dd class="col-sm-9">@Model.Heure</dd>
+
+                <dt class="col-sm-3">Manière de détection:</dt>
+                <dd class="col-sm-9">@Model.ManiereDeDetection</dd>
+
+                <dt class="col-sm-3">Nb pièces concernées:</dt>
+                <dd class="col-sm-9">@Model.NbreDePiecesConcernes</dd>
+
+                <dt class="col-sm-3">Raison du problème:</dt>
+                <dd class="col-sm-9">@Model.RaisonDuProbleme</dd>
+
+                <dt class="col-sm-3">Récurrence du problème:</dt>
+                <dd class="col-sm-9">@(Model.ReccurenceDuProbleme ? "Oui" : "Non")</dd>
+
+                <dt class="col-sm-3">Risque:</dt>
+                <dd class="col-sm-9">@(Model.Risque ? "Oui" : "Non")</dd>
+            </dl>
+        </div>
+    </div>
+    
+    <!-- D3: Action D3 -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">Action D3</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Action:</dt>
+                <dd class="col-sm-9">@Model.Action</dd>
+
+                <dt class="col-sm-3">Type réclamation:</dt>
+                <dd class="col-sm-9">@Model.TypeReclamation</dd>
+            </dl>
+        </div>
+    </div>
+
+    
+    <!-- D3: Action immédiate globale -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">D3: Action immédiate globale</h4>
+        </div>
+        <div class="card-body">
+            <!-- Tableau Action Immédiate Globale (lecture seule) -->
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Actions immédiates (&lt;24h)</th>
+                        <th class="text-center">OK</th>
+                        <th class="text-center">NOK</th>
+                        <th class="text-center">N/A</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Stopper tous les lots suspects, les isoler et les identifier</td>
+                        <td class="text-center">@((Model.ContenirStopperGlobale == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ContenirStopperGlobale == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ContenirStopperGlobale == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA) ? "✓" : "")</td>
+                    </tr>
+                    <tr>
+                        <td>Déroulement d'une réunion d'information pour les opérateurs</td>
+                        <td class="text-center">@((Model.ContenirDeroulementGlobale == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ContenirDeroulementGlobale == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ContenirDeroulementGlobale == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA) ? "✓" : "")</td>
+                    </tr>
+                    <tr>
+                        <td>Déclenchement et suivi de la réparation</td>
+                        <td class="text-center">@((Model.ReparerDeclenchementGlobale == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ReparerDeclenchementGlobale == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ReparerDeclenchementGlobale == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA) ? "✓" : "")</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+            <div class="form-group">
+                <label><strong>Conclusion Tri:</strong></label>
+                <p>@Model.ConclusionTri</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- D3: Contenir D3 -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">D3: Contenir D3</h4>
+        </div>
+        <div class="card-body">
+            <p><strong>Pilote:</strong> @(string.IsNullOrEmpty(Model.PiloteContenirFullName) ? Model.PiloteIDContenir : Model.PiloteContenirFullName)</p>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Actions contenir</th>
+                        <th class="text-center">OK</th>
+                        <th class="text-center">NOK</th>
+                        <th class="text-center">N/A</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Stopper / Isoler lots suspects</td>
+                        <td class="text-center">@((Model.ContenirStopper == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ContenirStopper == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ContenirStopper == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA) ? "✓" : "")</td>
+                    </tr>
+                    <tr>
+                        <td>Réunion d'information</td>
+                        <td class="text-center">@((Model.ContenirDeroulement == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ContenirDeroulement == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ContenirDeroulement == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA) ? "✓" : "")</td>
+                    </tr>
+                    <tr>
+                        <td>Ajout d'un super contrôle</td>
+                        <td class="text-center">@((Model.ContenirAjout == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ContenirAjout == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ContenirAjout == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA) ? "✓" : "")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- D3: Trier D3 -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">D3: Trier D3</h4>
+        </div>
+        <div class="card-body">
+            <p><strong>Pilote:</strong> @(string.IsNullOrEmpty(Model.PiloteTrierFullName) ? Model.PiloteIDTrier : Model.PiloteTrierFullName)</p>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Actions trier</th>
+                        <th class="text-center">OK</th>
+                        <th class="text-center">NOK</th>
+                        <th class="text-center">N/A</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Edition</td>
+                        <td class="text-center">@((Model.TrierEdition == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.TrierEdition == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.TrierEdition == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA) ? "✓" : "")</td>
+                    </tr>
+                    <tr>
+                        <td>Formation</td>
+                        <td class="text-center">@((Model.TrierFormation == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.TrierFormation == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.TrierFormation == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA) ? "✓" : "")</td>
+                    </tr>
+                    <tr>
+                        <td>Définition</td>
+                        <td class="text-center">@((Model.TrierDefinition == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.TrierDefinition == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.TrierDefinition == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA) ? "✓" : "")</td>
+                    </tr>
+                    <tr>
+                        <td>Déclenchement</td>
+                        <td class="text-center">@((Model.TrierDeclenchement == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.TrierDeclenchement == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.TrierDeclenchement == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA) ? "✓" : "")</td>
+                    </tr>
+                    <tr>
+                        <td>En cours</td>
+                        <td class="text-center">@((Model.TrierEnCours == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.TrierEnCours == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.TrierEnCours == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA) ? "✓" : "")</td>
+                    </tr>
+                    <tr>
+                        <td>Expédition</td>
+                        <td class="text-center">@((Model.TrierExpedition == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.TrierExpedition == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.TrierExpedition == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA) ? "✓" : "")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- D3: Réparer D3 -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">D3: Réparer D3</h4>
+        </div>
+        <div class="card-body">
+            <p><strong>Pilote:</strong> @(string.IsNullOrEmpty(Model.PiloteReparerFullName) ? Model.PiloteID : Model.PiloteReparerFullName)</p>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Actions réparer</th>
+                        <th class="text-center">OK</th>
+                        <th class="text-center">NOK</th>
+                        <th class="text-center">N/A</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Edition</td>
+                        <td class="text-center">@((Model.ReparerEdition == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ReparerEdition == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ReparerEdition == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA) ? "✓" : "")</td>
+                    </tr>
+                    <tr>
+                        <td>Définition des flux</td>
+                        <td class="text-center">@((Model.ReparerDefinitionDesFlux == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ReparerDefinitionDesFlux == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ReparerDefinitionDesFlux == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA) ? "✓" : "")</td>
+                    </tr>
+                    <tr>
+                        <td>Définition du point</td>
+                        <td class="text-center">@((Model.ReparerDefinitionDuPoint == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ReparerDefinitionDuPoint == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ReparerDefinitionDuPoint == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA) ? "✓" : "")</td>
+                    </tr>
+                    <tr>
+                        <td>Formation</td>
+                        <td class="text-center">@((Model.ReparerFormation == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ReparerFormation == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ReparerFormation == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA) ? "✓" : "")</td>
+                    </tr>
+                    <tr>
+                        <td>Déclenchement</td>
+                        <td class="text-center">@((Model.ReparerDeclenchement == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ReparerDeclenchement == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.ReparerDeclenchement == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA) ? "✓" : "")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- D3: Assurer D3 -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">D3: Assurer D3</h4>
+        </div>
+        <div class="card-body">
+            <p><strong>Pilote:</strong> @(string.IsNullOrEmpty(Model.PiloteAssurerFullName) ? Model.PiloteIDAssurer : Model.PiloteAssurerFullName)</p>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Actions assurer</th>
+                        <th class="text-center">OK</th>
+                        <th class="text-center">NOK</th>
+                        <th class="text-center">N/A</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Réunion</td>
+                        <td class="text-center">@((Model.AssurerReunion == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.AssurerReunion == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.AssurerReunion == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA) ? "✓" : "")</td>
+                    </tr>
+                    <tr>
+                        <td>Audit</td>
+                        <td class="text-center">@((Model.AssurerAudit == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.OK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.AssurerAudit == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NOK) ? "✓" : "")</td>
+                        <td class="text-center">@((Model.AssurerAudit == PFE_Etudiant_Asteelflash.Domain.Enums.Enum_Action_Immediate.NA) ? "✓" : "")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- D3: Tri action immédiate globale -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">D3: Tri action immédiate globale</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Jour 1:</dt>
+                <dd class="col-sm-9">@Model.Jour1</dd>
+                
+                <dt class="col-sm-3">Jour 2:</dt>
+                <dd class="col-sm-9">@Model.Jour2</dd>
+                
+                <dt class="col-sm-3">Jour 3:</dt>
+                <dd class="col-sm-9">@Model.Jour3</dd>
+
+                <dt class="col-sm-3">Jour 4:</dt>
+                <dd class="col-sm-9">@Model.Jour4</dd>
+
+                <dt class="col-sm-3">Jour 5:</dt>
+                <dd class="col-sm-9">@Model.Jour5</dd>
+            </dl>
+
+            @if (Model.TriActions != null && Model.TriActions.Any())
+            {
+                <table class="table table-striped mt-3">
+                    <thead>
+                        <tr>
+                            <th>Zone</th>
+                            <th>Nb pièces triées</th>
+                            <th>Nb pièces totales</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var tri in Model.TriActions)
+                        {
+                            <tr>
+                                <td>@tri.Zone</td>
+                                <td>@tri.NombrePieceTrie</td>
+                                <td>@tri.NombrePieceTotale</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+    
+    <!-- D3: Liste des actions -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">D3: Liste des actions</h4>
+        </div>
+        <div class="card-body">
+            @if (Model.ListeDesActions != null && Model.ListeDesActions.Any())
+            {
+                <table class="table table-striped">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Action</th>
+                            <th>Statut</th>
+                            <th>Date prévue</th>
+                            <th>Date réelle</th>
+                            <th>Commentaire</th>
+                            <th>Pilote</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var act in Model.ListeDesActions)
+                        {
+                            <tr>
+                                <td>@act.Action</td>
+                                <td>@act.StatusAction</td>
+                                <td>@act.DatePrevue.ToString("dd/MM/yyyy")</td>
+                                <td>@act.DateReelle.ToString("dd/MM/yyyy")</td>
+                                <td>@act.Commentaire</td>
+                                <td>@act.PiloteID</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="text-muted">Aucune action listée.</p>
+            }
+        </div>
+    </div>
+    
+    <!-- D4: Cause occurrence -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">D4: Cause occurrence</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Pourquoi:</dt>
+                <dd class="col-sm-9">@Model.PourquoiOccurence</dd>
+
+                <dt class="col-sm-3">Cause:</dt>
+                <dd class="col-sm-9">@Model.CauseOccurence</dd>
+            </dl>
+        </div>
+    </div>
+    
+    <!-- D4: Causes non détection -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">D4: Causes non détection</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Cause:</dt>
+                <dd class="col-sm-9">@Model.CauseNonDetection</dd>
+                
+                <dt class="col-sm-3">Pourquoi:</dt>
+                <dd class="col-sm-9">@Model.PourquoiNonDetection</dd>
+            </dl>
+        </div>
+    </div>
+    
+    <!-- D4: Recherche causes racines -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">D4: Recherche causes racines</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Action:</dt>
+                <dd class="col-sm-9">@Model.ActionRechercheCausesRacines</dd>
+
+                <dt class="col-sm-3">O/D:</dt>
+                <dd class="col-sm-9">@Model.OD</dd>
+
+                <dt class="col-sm-3">Pilote:</dt>
+                <dd class="col-sm-9">@Model.PiloteIDRechercheCausesRacines</dd>
+
+                <dt class="col-sm-3">Date prévue:</dt>
+                <dd class="col-sm-9">@Model.DatePrevueRechercheCauses?.ToString("d")</dd>
+
+                <dt class="col-sm-3">Date réelle:</dt>
+                <dd class="col-sm-9">@Model.DateReelleRechercheCauses?.ToString("d")</dd>
+
+                <dt class="col-sm-3">Évolution:</dt>
+                <dd class="col-sm-9">@Model.EvolutionRechercheCausesRacines</dd>
+            </dl>
+        </div>
+    </div>
+    
+    <!-- D5: Plan actions correctives -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">D5: Plan actions correctives</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Action élimination problème:</dt>
+                <dd class="col-sm-9">@Model.ActionEliminationProbleme</dd>
+                
+                <dt class="col-sm-3">Pilote:</dt>
+                <dd class="col-sm-9">@Model.PiloteIDPlanActions</dd>
+                
+                <dt class="col-sm-3">Date planifiée:</dt>
+                <dd class="col-sm-9">@Model.DatePlanifiee?.ToString("d")</dd>
+            </dl>
+        </div>
+    </div>
+    
+    <!-- D6: Suivi -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">D6: Suivi</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Équipe 1:</dt>
+                <dd class="col-sm-9">@Model.Equipe1</dd>
+                
+                <dt class="col-sm-3">Date réalisation 1:</dt>
+                <dd class="col-sm-9">@Model.DateRealisation1?.ToString("d")</dd>
+
+                <dt class="col-sm-3">Équipe 2:</dt>
+                <dd class="col-sm-9">@Model.Equipe2</dd>
+                <dt class="col-sm-3">Date réalisation 2:</dt>
+                <dd class="col-sm-9">@Model.DateRealisation2?.ToString("d")</dd>
+
+                <dt class="col-sm-3">Équipe 3:</dt>
+                <dd class="col-sm-9">@Model.Equipe3</dd>
+                <dt class="col-sm-3">Date réalisation 3:</dt>
+                <dd class="col-sm-9">@Model.DateRealisation3?.ToString("d")</dd>
+
+                <dt class="col-sm-3">Équipe 4:</dt>
+                <dd class="col-sm-9">@Model.Equipe4</dd>
+                <dt class="col-sm-3">Date réalisation 4:</dt>
+                <dd class="col-sm-9">@Model.DateRealisation4?.ToString("d")</dd>
+
+                <dt class="col-sm-3">Équipe 5:</dt>
+                <dd class="col-sm-9">@Model.Equipe5</dd>
+                <dt class="col-sm-3">Date réalisation 5:</dt>
+                <dd class="col-sm-9">@Model.DateRealisation5?.ToString("d")</dd>
+            </dl>
+        </div>
+    </div>
+    
+    <!-- D7: Act -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="mb-0">D7: Act</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Connaissance/Expérience:</dt>
+                <dd class="col-sm-9">@Model.ConnaissanceExperience</dd>
+            </dl>
+        </div>
+    </div>
+    
+   
+</div>
